@@ -1,0 +1,18 @@
+[package]
+name = "npug"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "Auto-NPU .npug FlatBuffer ABI"
+
+[dependencies]
+flatbuffers.workspace = true
+thiserror.workspace = true
+
+[build-dependencies]
+flatbuffers.workspace = true
+
+[[example]]
+name = "inspect"
+path = "examples/inspect.rs"
