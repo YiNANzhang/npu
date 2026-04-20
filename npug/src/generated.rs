@@ -311,6 +311,198 @@ impl<'a> ::flatbuffers::Verifiable for DType {
 }
 
 impl ::flatbuffers::SimpleToVerifyInSlice for DType {}
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MIN_QUANT_SCHEME: u8 = 0;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MAX_QUANT_SCHEME: u8 = 4;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+#[allow(non_camel_case_types)]
+pub const ENUM_VALUES_QUANT_SCHEME: [QuantScheme; 5] = [
+  QuantScheme::None,
+  QuantScheme::PerTensor,
+  QuantScheme::PerChannel,
+  QuantScheme::MxBlock32,
+  QuantScheme::NvBlock16,
+];
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[repr(transparent)]
+pub struct QuantScheme(pub u8);
+#[allow(non_upper_case_globals)]
+impl QuantScheme {
+  pub const None: Self = Self(0);
+  pub const PerTensor: Self = Self(1);
+  pub const PerChannel: Self = Self(2);
+  pub const MxBlock32: Self = Self(3);
+  pub const NvBlock16: Self = Self(4);
+
+  pub const ENUM_MIN: u8 = 0;
+  pub const ENUM_MAX: u8 = 4;
+  pub const ENUM_VALUES: &'static [Self] = &[
+    Self::None,
+    Self::PerTensor,
+    Self::PerChannel,
+    Self::MxBlock32,
+    Self::NvBlock16,
+  ];
+  /// Returns the variant's name or "" if unknown.
+  pub fn variant_name(self) -> Option<&'static str> {
+    match self {
+      Self::None => Some("None"),
+      Self::PerTensor => Some("PerTensor"),
+      Self::PerChannel => Some("PerChannel"),
+      Self::MxBlock32 => Some("MxBlock32"),
+      Self::NvBlock16 => Some("NvBlock16"),
+      _ => None,
+    }
+  }
+}
+impl ::core::fmt::Debug for QuantScheme {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+    if let Some(name) = self.variant_name() {
+      f.write_str(name)
+    } else {
+      f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+    }
+  }
+}
+impl<'a> ::flatbuffers::Follow<'a> for QuantScheme {
+  type Inner = Self;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+    Self(b)
+  }
+}
+
+impl ::flatbuffers::Push for QuantScheme {
+    type Output = QuantScheme;
+    #[inline]
+    unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+        unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+    }
+}
+
+impl ::flatbuffers::EndianScalar for QuantScheme {
+  type Scalar = u8;
+  #[inline]
+  fn to_little_endian(self) -> u8 {
+    self.0.to_le()
+  }
+  #[inline]
+  #[allow(clippy::wrong_self_convention)]
+  fn from_little_endian(v: u8) -> Self {
+    let b = u8::from_le(v);
+    Self(b)
+  }
+}
+
+impl<'a> ::flatbuffers::Verifiable for QuantScheme {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    u8::run_verifier(v, pos)
+  }
+}
+
+impl ::flatbuffers::SimpleToVerifyInSlice for QuantScheme {}
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MIN_MEMORY_REGION: u8 = 0;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MAX_MEMORY_REGION: u8 = 4;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+#[allow(non_camel_case_types)]
+pub const ENUM_VALUES_MEMORY_REGION: [MemoryRegion; 5] = [
+  MemoryRegion::Unknown,
+  MemoryRegion::Lsram,
+  MemoryRegion::Csram,
+  MemoryRegion::Slc,
+  MemoryRegion::Lpddr,
+];
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[repr(transparent)]
+pub struct MemoryRegion(pub u8);
+#[allow(non_upper_case_globals)]
+impl MemoryRegion {
+  pub const Unknown: Self = Self(0);
+  pub const Lsram: Self = Self(1);
+  pub const Csram: Self = Self(2);
+  pub const Slc: Self = Self(3);
+  pub const Lpddr: Self = Self(4);
+
+  pub const ENUM_MIN: u8 = 0;
+  pub const ENUM_MAX: u8 = 4;
+  pub const ENUM_VALUES: &'static [Self] = &[
+    Self::Unknown,
+    Self::Lsram,
+    Self::Csram,
+    Self::Slc,
+    Self::Lpddr,
+  ];
+  /// Returns the variant's name or "" if unknown.
+  pub fn variant_name(self) -> Option<&'static str> {
+    match self {
+      Self::Unknown => Some("Unknown"),
+      Self::Lsram => Some("Lsram"),
+      Self::Csram => Some("Csram"),
+      Self::Slc => Some("Slc"),
+      Self::Lpddr => Some("Lpddr"),
+      _ => None,
+    }
+  }
+}
+impl ::core::fmt::Debug for MemoryRegion {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+    if let Some(name) = self.variant_name() {
+      f.write_str(name)
+    } else {
+      f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+    }
+  }
+}
+impl<'a> ::flatbuffers::Follow<'a> for MemoryRegion {
+  type Inner = Self;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+    Self(b)
+  }
+}
+
+impl ::flatbuffers::Push for MemoryRegion {
+    type Output = MemoryRegion;
+    #[inline]
+    unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+        unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+    }
+}
+
+impl ::flatbuffers::EndianScalar for MemoryRegion {
+  type Scalar = u8;
+  #[inline]
+  fn to_little_endian(self) -> u8 {
+    self.0.to_le()
+  }
+  #[inline]
+  #[allow(clippy::wrong_self_convention)]
+  fn from_little_endian(v: u8) -> Self {
+    let b = u8::from_le(v);
+    Self(b)
+  }
+}
+
+impl<'a> ::flatbuffers::Verifiable for MemoryRegion {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    u8::run_verifier(v, pos)
+  }
+}
+
+impl ::flatbuffers::SimpleToVerifyInSlice for MemoryRegion {}
 pub enum ShapeOffset {}
 #[derive(Copy, Clone, PartialEq)]
 
@@ -596,6 +788,223 @@ impl BufferT {
     })
   }
 }
+pub enum QuantInfoOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct QuantInfo<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for QuantInfo<'a> {
+  type Inner = QuantInfo<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> QuantInfo<'a> {
+  pub const VT_SCHEME: ::flatbuffers::VOffsetT = 4;
+  pub const VT_SCALE_BUFFER: ::flatbuffers::VOffsetT = 6;
+  pub const VT_ZERO_POINT_BUFFER: ::flatbuffers::VOffsetT = 8;
+  pub const VT_AXIS: ::flatbuffers::VOffsetT = 10;
+  pub const VT_BLOCK_SIZE: ::flatbuffers::VOffsetT = 12;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    QuantInfo { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args QuantInfoArgs
+  ) -> ::flatbuffers::WIPOffset<QuantInfo<'bldr>> {
+    let mut builder = QuantInfoBuilder::new(_fbb);
+    builder.add_block_size(args.block_size);
+    builder.add_axis(args.axis);
+    builder.add_zero_point_buffer(args.zero_point_buffer);
+    builder.add_scale_buffer(args.scale_buffer);
+    builder.add_scheme(args.scheme);
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> QuantInfoT {
+    let scheme = self.scheme();
+    let scale_buffer = self.scale_buffer();
+    let zero_point_buffer = self.zero_point_buffer();
+    let axis = self.axis();
+    let block_size = self.block_size();
+    QuantInfoT {
+      scheme,
+      scale_buffer,
+      zero_point_buffer,
+      axis,
+      block_size,
+    }
+  }
+
+  #[inline]
+  pub fn scheme(&self) -> QuantScheme {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<QuantScheme>(QuantInfo::VT_SCHEME, Some(QuantScheme::None)).unwrap()}
+  }
+  #[inline]
+  pub fn scale_buffer(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(QuantInfo::VT_SCALE_BUFFER, Some(4294967295)).unwrap()}
+  }
+  #[inline]
+  pub fn zero_point_buffer(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(QuantInfo::VT_ZERO_POINT_BUFFER, Some(4294967295)).unwrap()}
+  }
+  #[inline]
+  pub fn axis(&self) -> i32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<i32>(QuantInfo::VT_AXIS, Some(-1)).unwrap()}
+  }
+  #[inline]
+  pub fn block_size(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(QuantInfo::VT_BLOCK_SIZE, Some(0)).unwrap()}
+  }
+}
+
+impl ::flatbuffers::Verifiable for QuantInfo<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<QuantScheme>("scheme", Self::VT_SCHEME, false)?
+     .visit_field::<u32>("scale_buffer", Self::VT_SCALE_BUFFER, false)?
+     .visit_field::<u32>("zero_point_buffer", Self::VT_ZERO_POINT_BUFFER, false)?
+     .visit_field::<i32>("axis", Self::VT_AXIS, false)?
+     .visit_field::<u32>("block_size", Self::VT_BLOCK_SIZE, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct QuantInfoArgs {
+    pub scheme: QuantScheme,
+    pub scale_buffer: u32,
+    pub zero_point_buffer: u32,
+    pub axis: i32,
+    pub block_size: u32,
+}
+impl<'a> Default for QuantInfoArgs {
+  #[inline]
+  fn default() -> Self {
+    QuantInfoArgs {
+      scheme: QuantScheme::None,
+      scale_buffer: 4294967295,
+      zero_point_buffer: 4294967295,
+      axis: -1,
+      block_size: 0,
+    }
+  }
+}
+
+pub struct QuantInfoBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> QuantInfoBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_scheme(&mut self, scheme: QuantScheme) {
+    self.fbb_.push_slot::<QuantScheme>(QuantInfo::VT_SCHEME, scheme, QuantScheme::None);
+  }
+  #[inline]
+  pub fn add_scale_buffer(&mut self, scale_buffer: u32) {
+    self.fbb_.push_slot::<u32>(QuantInfo::VT_SCALE_BUFFER, scale_buffer, 4294967295);
+  }
+  #[inline]
+  pub fn add_zero_point_buffer(&mut self, zero_point_buffer: u32) {
+    self.fbb_.push_slot::<u32>(QuantInfo::VT_ZERO_POINT_BUFFER, zero_point_buffer, 4294967295);
+  }
+  #[inline]
+  pub fn add_axis(&mut self, axis: i32) {
+    self.fbb_.push_slot::<i32>(QuantInfo::VT_AXIS, axis, -1);
+  }
+  #[inline]
+  pub fn add_block_size(&mut self, block_size: u32) {
+    self.fbb_.push_slot::<u32>(QuantInfo::VT_BLOCK_SIZE, block_size, 0);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> QuantInfoBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    QuantInfoBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<QuantInfo<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for QuantInfo<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("QuantInfo");
+      ds.field("scheme", &self.scheme());
+      ds.field("scale_buffer", &self.scale_buffer());
+      ds.field("zero_point_buffer", &self.zero_point_buffer());
+      ds.field("axis", &self.axis());
+      ds.field("block_size", &self.block_size());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct QuantInfoT {
+  pub scheme: QuantScheme,
+  pub scale_buffer: u32,
+  pub zero_point_buffer: u32,
+  pub axis: i32,
+  pub block_size: u32,
+}
+impl Default for QuantInfoT {
+  fn default() -> Self {
+    Self {
+      scheme: QuantScheme::None,
+      scale_buffer: 4294967295,
+      zero_point_buffer: 4294967295,
+      axis: -1,
+      block_size: 0,
+    }
+  }
+}
+impl QuantInfoT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<QuantInfo<'b>> {
+    let scheme = self.scheme;
+    let scale_buffer = self.scale_buffer;
+    let zero_point_buffer = self.zero_point_buffer;
+    let axis = self.axis;
+    let block_size = self.block_size;
+    QuantInfo::create(_fbb, &QuantInfoArgs{
+      scheme,
+      scale_buffer,
+      zero_point_buffer,
+      axis,
+      block_size,
+    })
+  }
+}
 pub enum TensorOffset {}
 #[derive(Copy, Clone, PartialEq)]
 
@@ -616,6 +1025,9 @@ impl<'a> Tensor<'a> {
   pub const VT_DTYPE: ::flatbuffers::VOffsetT = 6;
   pub const VT_SHAPE: ::flatbuffers::VOffsetT = 8;
   pub const VT_BUFFER: ::flatbuffers::VOffsetT = 10;
+  pub const VT_QUANT: ::flatbuffers::VOffsetT = 12;
+  pub const VT_REGION: ::flatbuffers::VOffsetT = 14;
+  pub const VT_OFFSET: ::flatbuffers::VOffsetT = 16;
 
   #[inline]
   pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -627,9 +1039,12 @@ impl<'a> Tensor<'a> {
     args: &'args TensorArgs<'args>
   ) -> ::flatbuffers::WIPOffset<Tensor<'bldr>> {
     let mut builder = TensorBuilder::new(_fbb);
+    builder.add_offset(args.offset);
+    if let Some(x) = args.quant { builder.add_quant(x); }
     builder.add_buffer(args.buffer);
     if let Some(x) = args.shape { builder.add_shape(x); }
     if let Some(x) = args.name { builder.add_name(x); }
+    builder.add_region(args.region);
     builder.add_dtype(args.dtype);
     builder.finish()
   }
@@ -643,11 +1058,19 @@ impl<'a> Tensor<'a> {
       alloc::boxed::Box::new(x.unpack())
     });
     let buffer = self.buffer();
+    let quant = self.quant().map(|x| {
+      alloc::boxed::Box::new(x.unpack())
+    });
+    let region = self.region();
+    let offset = self.offset();
     TensorT {
       name,
       dtype,
       shape,
       buffer,
+      quant,
+      region,
+      offset,
     }
   }
 
@@ -679,6 +1102,27 @@ impl<'a> Tensor<'a> {
     // which contains a valid value in this slot
     unsafe { self._tab.get::<u32>(Tensor::VT_BUFFER, Some(4294967295)).unwrap()}
   }
+  #[inline]
+  pub fn quant(&self) -> Option<QuantInfo<'a>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<QuantInfo>>(Tensor::VT_QUANT, None)}
+  }
+  #[inline]
+  pub fn region(&self) -> MemoryRegion {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<MemoryRegion>(Tensor::VT_REGION, Some(MemoryRegion::Unknown)).unwrap()}
+  }
+  #[inline]
+  pub fn offset(&self) -> u64 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u64>(Tensor::VT_OFFSET, Some(0)).unwrap()}
+  }
 }
 
 impl ::flatbuffers::Verifiable for Tensor<'_> {
@@ -691,6 +1135,9 @@ impl ::flatbuffers::Verifiable for Tensor<'_> {
      .visit_field::<DType>("dtype", Self::VT_DTYPE, false)?
      .visit_field::<::flatbuffers::ForwardsUOffset<Shape>>("shape", Self::VT_SHAPE, false)?
      .visit_field::<u32>("buffer", Self::VT_BUFFER, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<QuantInfo>>("quant", Self::VT_QUANT, false)?
+     .visit_field::<MemoryRegion>("region", Self::VT_REGION, false)?
+     .visit_field::<u64>("offset", Self::VT_OFFSET, false)?
      .finish();
     Ok(())
   }
@@ -700,6 +1147,9 @@ pub struct TensorArgs<'a> {
     pub dtype: DType,
     pub shape: Option<::flatbuffers::WIPOffset<Shape<'a>>>,
     pub buffer: u32,
+    pub quant: Option<::flatbuffers::WIPOffset<QuantInfo<'a>>>,
+    pub region: MemoryRegion,
+    pub offset: u64,
 }
 impl<'a> Default for TensorArgs<'a> {
   #[inline]
@@ -709,6 +1159,9 @@ impl<'a> Default for TensorArgs<'a> {
       dtype: DType::Unknown,
       shape: None,
       buffer: 4294967295,
+      quant: None,
+      region: MemoryRegion::Unknown,
+      offset: 0,
     }
   }
 }
@@ -735,6 +1188,18 @@ impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> TensorBuilder<'a, 'b, A> {
     self.fbb_.push_slot::<u32>(Tensor::VT_BUFFER, buffer, 4294967295);
   }
   #[inline]
+  pub fn add_quant(&mut self, quant: ::flatbuffers::WIPOffset<QuantInfo<'b >>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<QuantInfo>>(Tensor::VT_QUANT, quant);
+  }
+  #[inline]
+  pub fn add_region(&mut self, region: MemoryRegion) {
+    self.fbb_.push_slot::<MemoryRegion>(Tensor::VT_REGION, region, MemoryRegion::Unknown);
+  }
+  #[inline]
+  pub fn add_offset(&mut self, offset: u64) {
+    self.fbb_.push_slot::<u64>(Tensor::VT_OFFSET, offset, 0);
+  }
+  #[inline]
   pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> TensorBuilder<'a, 'b, A> {
     let start = _fbb.start_table();
     TensorBuilder {
@@ -756,6 +1221,9 @@ impl ::core::fmt::Debug for Tensor<'_> {
       ds.field("dtype", &self.dtype());
       ds.field("shape", &self.shape());
       ds.field("buffer", &self.buffer());
+      ds.field("quant", &self.quant());
+      ds.field("region", &self.region());
+      ds.field("offset", &self.offset());
       ds.finish()
   }
 }
@@ -766,6 +1234,9 @@ pub struct TensorT {
   pub dtype: DType,
   pub shape: Option<alloc::boxed::Box<ShapeT>>,
   pub buffer: u32,
+  pub quant: Option<alloc::boxed::Box<QuantInfoT>>,
+  pub region: MemoryRegion,
+  pub offset: u64,
 }
 impl Default for TensorT {
   fn default() -> Self {
@@ -774,6 +1245,9 @@ impl Default for TensorT {
       dtype: DType::Unknown,
       shape: None,
       buffer: 4294967295,
+      quant: None,
+      region: MemoryRegion::Unknown,
+      offset: 0,
     }
   }
 }
@@ -790,11 +1264,19 @@ impl TensorT {
       x.pack(_fbb)
     });
     let buffer = self.buffer;
+    let quant = self.quant.as_ref().map(|x|{
+      x.pack(_fbb)
+    });
+    let region = self.region;
+    let offset = self.offset;
     Tensor::create(_fbb, &TensorArgs{
       name,
       dtype,
       shape,
       buffer,
+      quant,
+      region,
+      offset,
     })
   }
 }

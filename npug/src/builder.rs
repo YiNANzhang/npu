@@ -10,6 +10,26 @@ pub struct TensorDesc<'a> {
     pub buffer: Option<u32>,
 }
 
+pub struct QuantDesc {
+    pub scheme: fb::QuantScheme,
+    pub scale_buffer: Option<u32>,
+    pub zero_point_buffer: Option<u32>,
+    pub axis: i32,
+    pub block_size: u32,
+}
+
+impl Default for QuantDesc {
+    fn default() -> Self {
+        Self {
+            scheme: fb::QuantScheme::None,
+            scale_buffer: None,
+            zero_point_buffer: None,
+            axis: -1,
+            block_size: 0,
+        }
+    }
+}
+
 pub struct GraphBuilder<'a> {
     fbb: FlatBufferBuilder<'a>,
     producer: Option<String>,
@@ -24,6 +44,9 @@ struct PendingTensor {
     dims: Vec<i64>,
     symbol_names: Vec<String>,
     buffer: u32,
+    quant: QuantDesc,
+    region: fb::MemoryRegion,
+    offset: u64,
 }
 
 impl<'a> GraphBuilder<'a> {
@@ -65,8 +88,22 @@ impl<'a> GraphBuilder<'a> {
             dims: desc.dims.to_vec(),
             symbol_names: desc.symbol_names.iter().map(|s| s.to_string()).collect(),
             buffer: desc.buffer.unwrap_or(u32::MAX),
+            quant: QuantDesc::default(),
+            region: fb::MemoryRegion::Unknown,
+            offset: 0,
         });
         idx
+    }
+
+    pub fn attach_quant(&mut self, tensor_idx: u32, q: QuantDesc) -> &mut Self {
+        self.pending_tensors[tensor_idx as usize].quant = q;
+        self
+    }
+
+    pub fn set_region(&mut self, tensor_idx: u32, region: fb::MemoryRegion, offset: u64) -> &mut Self {
+        self.pending_tensors[tensor_idx as usize].region = region;
+        self.pending_tensors[tensor_idx as usize].offset = offset;
+        self
     }
 
     pub fn finish(mut self) -> Vec<u8> {
@@ -101,6 +138,16 @@ impl<'a> GraphBuilder<'a> {
                         symbol_names: Some(symbol_vec),
                     },
                 );
+                let quant = fb::QuantInfo::create(
+                    &mut self.fbb,
+                    &fb::QuantInfoArgs {
+                        scheme: t.quant.scheme,
+                        scale_buffer: t.quant.scale_buffer.unwrap_or(u32::MAX),
+                        zero_point_buffer: t.quant.zero_point_buffer.unwrap_or(u32::MAX),
+                        axis: t.quant.axis,
+                        block_size: t.quant.block_size,
+                    },
+                );
                 fb::Tensor::create(
                     &mut self.fbb,
                     &fb::TensorArgs {
@@ -108,6 +155,9 @@ impl<'a> GraphBuilder<'a> {
                         dtype: t.dtype,
                         shape: Some(shape),
                         buffer: t.buffer,
+                        quant: Some(quant),
+                        region: t.region,
+                        offset: t.offset,
                     },
                 )
             })

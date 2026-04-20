@@ -2,12 +2,23 @@ use crate::error::{Error, Result};
 use crate::generated::npug as fb;
 use crate::version;
 
+pub struct QuantView {
+    pub scheme: fb::QuantScheme,
+    pub scale_buffer: Option<u32>,
+    pub zero_point_buffer: Option<u32>,
+    pub axis: i32,
+    pub block_size: u32,
+}
+
 pub struct TensorView {
     pub name: String,
     pub dtype: fb::DType,
     pub dims: Vec<i64>,
     pub symbol_names: Vec<String>,
     pub buffer: u32,
+    pub quant: QuantView,
+    pub region: fb::MemoryRegion,
+    pub offset: u64,
 }
 
 pub struct GraphReader<'a> {
@@ -51,20 +62,32 @@ impl<'a> GraphReader<'a> {
             .tensors()
             .map(|v| {
                 v.iter()
-                    .map(|t| TensorView {
-                        name: t.name().unwrap_or("").to_string(),
-                        dtype: t.dtype(),
-                        dims: t
-                            .shape()
-                            .and_then(|s| s.dims())
-                            .map(|d| d.iter().collect())
-                            .unwrap_or_default(),
-                        symbol_names: t
-                            .shape()
-                            .and_then(|s| s.symbol_names())
-                            .map(|v| v.iter().map(|s| s.to_string()).collect())
-                            .unwrap_or_default(),
-                        buffer: t.buffer(),
+                    .map(|t| {
+                        let q = t.quant();
+                        TensorView {
+                            name: t.name().unwrap_or("").to_string(),
+                            dtype: t.dtype(),
+                            dims: t
+                                .shape()
+                                .and_then(|s| s.dims())
+                                .map(|d| d.iter().collect())
+                                .unwrap_or_default(),
+                            symbol_names: t
+                                .shape()
+                                .and_then(|s| s.symbol_names())
+                                .map(|v| v.iter().map(|s| s.to_string()).collect())
+                                .unwrap_or_default(),
+                            buffer: t.buffer(),
+                            quant: QuantView {
+                                scheme: q.map(|q| q.scheme()).unwrap_or(fb::QuantScheme::None),
+                                scale_buffer: q.and_then(|q| (q.scale_buffer() != u32::MAX).then_some(q.scale_buffer())),
+                                zero_point_buffer: q.and_then(|q| (q.zero_point_buffer() != u32::MAX).then_some(q.zero_point_buffer())),
+                                axis: q.map(|q| q.axis()).unwrap_or(-1),
+                                block_size: q.map(|q| q.block_size()).unwrap_or(0),
+                            },
+                            region: t.region(),
+                            offset: t.offset(),
+                        }
                     })
                     .collect()
             })

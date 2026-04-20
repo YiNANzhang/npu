@@ -37,11 +37,38 @@ table Buffer {
     data : [ubyte];
 }
 
+enum QuantScheme : uint8 {
+    None       = 0,
+    PerTensor  = 1,
+    PerChannel = 2,
+    MxBlock32  = 3,  // block=32, scale E8M0 (OCP MX)
+    NvBlock16  = 4,  // block=16, scale E4M3 (Nvidia NVFP)
+}
+
+enum MemoryRegion : uint8 {
+    Unknown = 0,
+    Lsram   = 1,
+    Csram   = 2,
+    Slc     = 3,
+    Lpddr   = 4,
+}
+
+table QuantInfo {
+    scheme            : QuantScheme = None;
+    scale_buffer      : uint32 = 0xffffffff;
+    zero_point_buffer : uint32 = 0xffffffff;
+    axis              : int32  = -1;
+    block_size        : uint32 = 0;
+}
+
 table Tensor {
     name   : string;
     dtype  : DType;
     shape  : Shape;
     buffer : uint32 = 0xffffffff;  // 0xffffffff = no buffer (activation placeholder)
+    quant  : QuantInfo;              // NEW
+    region : MemoryRegion = Unknown; // NEW
+    offset : uint64 = 0;             // NEW
 }
 
 table Graph {
