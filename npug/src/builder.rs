@@ -1,6 +1,6 @@
 use crate::generated::npug as fb;
 use crate::version;
-use flatbuffers::{FlatBufferBuilder, WIPOffset};
+use flatbuffers::FlatBufferBuilder;
 
 pub struct TensorDesc<'a> {
     pub name: &'a str,
@@ -44,6 +44,37 @@ struct PendingKernel {
     entry_offset: u64,
 }
 
+pub struct ScheduleEntryDesc {
+    pub tile_id: u32,
+    pub kernel_index: u32,
+    pub args_offset: u64,
+    pub args_size: u32,
+}
+
+pub struct BucketDesc<'a> {
+    pub shape_hint_dims: &'a [i64],
+    pub schedule: &'a [ScheduleEntryDesc],
+}
+
+pub struct EntryPointDesc<'a> {
+    pub name: &'a str,
+    pub inputs: &'a [u32],
+    pub outputs: &'a [u32],
+    pub buckets: &'a [BucketDesc<'a>],
+}
+
+struct PendingEntryPoint {
+    name: String,
+    inputs: Vec<u32>,
+    outputs: Vec<u32>,
+    buckets: Vec<PendingBucket>,
+}
+
+struct PendingBucket {
+    shape_hint_dims: Vec<i64>,
+    schedule: Vec<ScheduleEntryDesc>,
+}
+
 pub struct GraphBuilder<'a> {
     fbb: FlatBufferBuilder<'a>,
     producer: Option<String>,
@@ -51,6 +82,7 @@ pub struct GraphBuilder<'a> {
     pending_tensors: Vec<PendingTensor>,
     pending_buffers: Vec<Vec<u8>>,
     pending_kernels: Vec<PendingKernel>,
+    pending_entry_points: Vec<PendingEntryPoint>,
 }
 
 struct PendingTensor {
@@ -73,6 +105,7 @@ impl<'a> GraphBuilder<'a> {
             pending_tensors: Vec::new(),
             pending_buffers: Vec::new(),
             pending_kernels: Vec::new(),
+            pending_entry_points: Vec::new(),
         }
     }
 
@@ -131,6 +164,25 @@ impl<'a> GraphBuilder<'a> {
         self.pending_tensors[tensor_idx as usize].region = region;
         self.pending_tensors[tensor_idx as usize].offset = offset;
         self
+    }
+
+    pub fn add_entry_point(&mut self, d: EntryPointDesc<'_>) -> u32 {
+        let idx = self.pending_entry_points.len() as u32;
+        self.pending_entry_points.push(PendingEntryPoint {
+            name: d.name.to_string(),
+            inputs: d.inputs.to_vec(),
+            outputs: d.outputs.to_vec(),
+            buckets: d.buckets.iter().map(|b| PendingBucket {
+                shape_hint_dims: b.shape_hint_dims.to_vec(),
+                schedule: b.schedule.iter().map(|e| ScheduleEntryDesc {
+                    tile_id: e.tile_id,
+                    kernel_index: e.kernel_index,
+                    args_offset: e.args_offset,
+                    args_size: e.args_size,
+                }).collect(),
+            }).collect(),
+        });
+        idx
     }
 
     pub fn finish(mut self) -> Vec<u8> {
@@ -210,8 +262,71 @@ impl<'a> GraphBuilder<'a> {
         let kernels_vec = self.fbb.create_vector(&kernel_offsets);
 
         let producer = self.producer.take().map(|s| self.fbb.create_string(&s));
-        let empty_eps: Vec<WIPOffset<fb::EntryPoint>> = Vec::new();
-        let entry_points = self.fbb.create_vector(&empty_eps);
+
+        // Entry points
+        let ep_offsets: Vec<_> = self
+            .pending_entry_points
+            .iter()
+            .map(|ep| {
+                let name = self.fbb.create_string(&ep.name);
+                let inputs = self.fbb.create_vector(&ep.inputs);
+                let outputs = self.fbb.create_vector(&ep.outputs);
+
+                let bucket_offsets: Vec<_> = ep
+                    .buckets
+                    .iter()
+                    .map(|b| {
+                        let dims = self.fbb.create_vector(&b.shape_hint_dims);
+                        let empty_syms: Vec<flatbuffers::WIPOffset<&str>> = Vec::new();
+                        let symbol_names = self.fbb.create_vector(&empty_syms);
+                        let shape = fb::Shape::create(
+                            &mut self.fbb,
+                            &fb::ShapeArgs {
+                                dims: Some(dims),
+                                symbol_names: Some(symbol_names),
+                            },
+                        );
+
+                        let sched_offsets: Vec<_> = b
+                            .schedule
+                            .iter()
+                            .map(|e| {
+                                fb::ScheduleEntry::create(
+                                    &mut self.fbb,
+                                    &fb::ScheduleEntryArgs {
+                                        tile_id: e.tile_id,
+                                        kernel_index: e.kernel_index,
+                                        args_offset: e.args_offset,
+                                        args_size: e.args_size,
+                                    },
+                                )
+                            })
+                            .collect();
+                        let schedule = self.fbb.create_vector(&sched_offsets);
+
+                        fb::Bucket::create(
+                            &mut self.fbb,
+                            &fb::BucketArgs {
+                                shape_hint: Some(shape),
+                                schedule: Some(schedule),
+                            },
+                        )
+                    })
+                    .collect();
+                let buckets = self.fbb.create_vector(&bucket_offsets);
+
+                fb::EntryPoint::create(
+                    &mut self.fbb,
+                    &fb::EntryPointArgs {
+                        name: Some(name),
+                        inputs: Some(inputs),
+                        outputs: Some(outputs),
+                        buckets: Some(buckets),
+                    },
+                )
+            })
+            .collect();
+        let entry_points = self.fbb.create_vector(&ep_offsets);
 
         let graph = fb::Graph::create(
             &mut self.fbb,

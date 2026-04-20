@@ -94,8 +94,23 @@ table Graph {
     entry_points : [EntryPoint];
 }
 
+table ScheduleEntry {
+    tile_id      : uint32;
+    kernel_index : uint32;
+    args_offset  : uint64 = 0;
+    args_size    : uint32 = 0;
+}
+
+table Bucket {
+    shape_hint : Shape;
+    schedule   : [ScheduleEntry];
+}
+
 table EntryPoint {
-    name : string;
+    name    : string;
+    inputs  : [uint32];
+    outputs : [uint32];
+    buckets : [Bucket];
 }
 
 root_type Graph;

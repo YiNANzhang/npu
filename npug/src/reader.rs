@@ -2,6 +2,25 @@ use crate::error::{Error, Result};
 use crate::generated::npug as fb;
 use crate::version;
 
+pub struct ScheduleEntryView {
+    pub tile_id: u32,
+    pub kernel_index: u32,
+    pub args_offset: u64,
+    pub args_size: u32,
+}
+
+pub struct BucketView {
+    pub shape_hint_dims: Vec<i64>,
+    pub schedule: Vec<ScheduleEntryView>,
+}
+
+pub struct EntryPointView {
+    pub name: String,
+    pub inputs: Vec<u32>,
+    pub outputs: Vec<u32>,
+    pub buckets: Vec<BucketView>,
+}
+
 pub struct KernelView {
     pub name: String,
     pub kind: fb::KernelKind,
@@ -61,6 +80,58 @@ impl<'a> GraphReader<'a> {
         self.graph
             .entry_points()
             .map(|v| v.iter().map(|e| e.name().unwrap_or("")).collect())
+            .unwrap_or_default()
+    }
+
+    pub fn entry_points_full(&self) -> Vec<EntryPointView> {
+        self.graph
+            .entry_points()
+            .map(|v| {
+                v.iter()
+                    .map(|ep| {
+                        let buckets = ep
+                            .buckets()
+                            .map(|bv| {
+                                bv.iter()
+                                    .map(|b| {
+                                        let shape_hint_dims = b
+                                            .shape_hint()
+                                            .and_then(|s| s.dims())
+                                            .map(|d| d.iter().collect())
+                                            .unwrap_or_default();
+                                        let schedule = b
+                                            .schedule()
+                                            .map(|sv| {
+                                                sv.iter()
+                                                    .map(|e| ScheduleEntryView {
+                                                        tile_id: e.tile_id(),
+                                                        kernel_index: e.kernel_index(),
+                                                        args_offset: e.args_offset(),
+                                                        args_size: e.args_size(),
+                                                    })
+                                                    .collect()
+                                            })
+                                            .unwrap_or_default();
+                                        BucketView { shape_hint_dims, schedule }
+                                    })
+                                    .collect()
+                            })
+                            .unwrap_or_default();
+                        EntryPointView {
+                            name: ep.name().unwrap_or("").to_string(),
+                            inputs: ep
+                                .inputs()
+                                .map(|v| v.iter().collect())
+                                .unwrap_or_default(),
+                            outputs: ep
+                                .outputs()
+                                .map(|v| v.iter().collect())
+                                .unwrap_or_default(),
+                            buckets,
+                        }
+                    })
+                    .collect()
+            })
             .unwrap_or_default()
     }
 

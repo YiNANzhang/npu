@@ -1849,6 +1849,356 @@ impl GraphT {
     })
   }
 }
+pub enum ScheduleEntryOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct ScheduleEntry<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for ScheduleEntry<'a> {
+  type Inner = ScheduleEntry<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> ScheduleEntry<'a> {
+  pub const VT_TILE_ID: ::flatbuffers::VOffsetT = 4;
+  pub const VT_KERNEL_INDEX: ::flatbuffers::VOffsetT = 6;
+  pub const VT_ARGS_OFFSET: ::flatbuffers::VOffsetT = 8;
+  pub const VT_ARGS_SIZE: ::flatbuffers::VOffsetT = 10;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    ScheduleEntry { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args ScheduleEntryArgs
+  ) -> ::flatbuffers::WIPOffset<ScheduleEntry<'bldr>> {
+    let mut builder = ScheduleEntryBuilder::new(_fbb);
+    builder.add_args_offset(args.args_offset);
+    builder.add_args_size(args.args_size);
+    builder.add_kernel_index(args.kernel_index);
+    builder.add_tile_id(args.tile_id);
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> ScheduleEntryT {
+    let tile_id = self.tile_id();
+    let kernel_index = self.kernel_index();
+    let args_offset = self.args_offset();
+    let args_size = self.args_size();
+    ScheduleEntryT {
+      tile_id,
+      kernel_index,
+      args_offset,
+      args_size,
+    }
+  }
+
+  #[inline]
+  pub fn tile_id(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(ScheduleEntry::VT_TILE_ID, Some(0)).unwrap()}
+  }
+  #[inline]
+  pub fn kernel_index(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(ScheduleEntry::VT_KERNEL_INDEX, Some(0)).unwrap()}
+  }
+  #[inline]
+  pub fn args_offset(&self) -> u64 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u64>(ScheduleEntry::VT_ARGS_OFFSET, Some(0)).unwrap()}
+  }
+  #[inline]
+  pub fn args_size(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(ScheduleEntry::VT_ARGS_SIZE, Some(0)).unwrap()}
+  }
+}
+
+impl ::flatbuffers::Verifiable for ScheduleEntry<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<u32>("tile_id", Self::VT_TILE_ID, false)?
+     .visit_field::<u32>("kernel_index", Self::VT_KERNEL_INDEX, false)?
+     .visit_field::<u64>("args_offset", Self::VT_ARGS_OFFSET, false)?
+     .visit_field::<u32>("args_size", Self::VT_ARGS_SIZE, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct ScheduleEntryArgs {
+    pub tile_id: u32,
+    pub kernel_index: u32,
+    pub args_offset: u64,
+    pub args_size: u32,
+}
+impl<'a> Default for ScheduleEntryArgs {
+  #[inline]
+  fn default() -> Self {
+    ScheduleEntryArgs {
+      tile_id: 0,
+      kernel_index: 0,
+      args_offset: 0,
+      args_size: 0,
+    }
+  }
+}
+
+pub struct ScheduleEntryBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> ScheduleEntryBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_tile_id(&mut self, tile_id: u32) {
+    self.fbb_.push_slot::<u32>(ScheduleEntry::VT_TILE_ID, tile_id, 0);
+  }
+  #[inline]
+  pub fn add_kernel_index(&mut self, kernel_index: u32) {
+    self.fbb_.push_slot::<u32>(ScheduleEntry::VT_KERNEL_INDEX, kernel_index, 0);
+  }
+  #[inline]
+  pub fn add_args_offset(&mut self, args_offset: u64) {
+    self.fbb_.push_slot::<u64>(ScheduleEntry::VT_ARGS_OFFSET, args_offset, 0);
+  }
+  #[inline]
+  pub fn add_args_size(&mut self, args_size: u32) {
+    self.fbb_.push_slot::<u32>(ScheduleEntry::VT_ARGS_SIZE, args_size, 0);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> ScheduleEntryBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    ScheduleEntryBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<ScheduleEntry<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for ScheduleEntry<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("ScheduleEntry");
+      ds.field("tile_id", &self.tile_id());
+      ds.field("kernel_index", &self.kernel_index());
+      ds.field("args_offset", &self.args_offset());
+      ds.field("args_size", &self.args_size());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ScheduleEntryT {
+  pub tile_id: u32,
+  pub kernel_index: u32,
+  pub args_offset: u64,
+  pub args_size: u32,
+}
+impl Default for ScheduleEntryT {
+  fn default() -> Self {
+    Self {
+      tile_id: 0,
+      kernel_index: 0,
+      args_offset: 0,
+      args_size: 0,
+    }
+  }
+}
+impl ScheduleEntryT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<ScheduleEntry<'b>> {
+    let tile_id = self.tile_id;
+    let kernel_index = self.kernel_index;
+    let args_offset = self.args_offset;
+    let args_size = self.args_size;
+    ScheduleEntry::create(_fbb, &ScheduleEntryArgs{
+      tile_id,
+      kernel_index,
+      args_offset,
+      args_size,
+    })
+  }
+}
+pub enum BucketOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct Bucket<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for Bucket<'a> {
+  type Inner = Bucket<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> Bucket<'a> {
+  pub const VT_SHAPE_HINT: ::flatbuffers::VOffsetT = 4;
+  pub const VT_SCHEDULE: ::flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    Bucket { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args BucketArgs<'args>
+  ) -> ::flatbuffers::WIPOffset<Bucket<'bldr>> {
+    let mut builder = BucketBuilder::new(_fbb);
+    if let Some(x) = args.schedule { builder.add_schedule(x); }
+    if let Some(x) = args.shape_hint { builder.add_shape_hint(x); }
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> BucketT {
+    let shape_hint = self.shape_hint().map(|x| {
+      alloc::boxed::Box::new(x.unpack())
+    });
+    let schedule = self.schedule().map(|x| {
+      x.iter().map(|t| t.unpack()).collect()
+    });
+    BucketT {
+      shape_hint,
+      schedule,
+    }
+  }
+
+  #[inline]
+  pub fn shape_hint(&self) -> Option<Shape<'a>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<Shape>>(Bucket::VT_SHAPE_HINT, None)}
+  }
+  #[inline]
+  pub fn schedule(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<ScheduleEntry<'a>>>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<ScheduleEntry>>>>(Bucket::VT_SCHEDULE, None)}
+  }
+}
+
+impl ::flatbuffers::Verifiable for Bucket<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<Shape>>("shape_hint", Self::VT_SHAPE_HINT, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<ScheduleEntry>>>>("schedule", Self::VT_SCHEDULE, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct BucketArgs<'a> {
+    pub shape_hint: Option<::flatbuffers::WIPOffset<Shape<'a>>>,
+    pub schedule: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<ScheduleEntry<'a>>>>>,
+}
+impl<'a> Default for BucketArgs<'a> {
+  #[inline]
+  fn default() -> Self {
+    BucketArgs {
+      shape_hint: None,
+      schedule: None,
+    }
+  }
+}
+
+pub struct BucketBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> BucketBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_shape_hint(&mut self, shape_hint: ::flatbuffers::WIPOffset<Shape<'b >>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<Shape>>(Bucket::VT_SHAPE_HINT, shape_hint);
+  }
+  #[inline]
+  pub fn add_schedule(&mut self, schedule: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<ScheduleEntry<'b >>>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Bucket::VT_SCHEDULE, schedule);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> BucketBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    BucketBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<Bucket<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for Bucket<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("Bucket");
+      ds.field("shape_hint", &self.shape_hint());
+      ds.field("schedule", &self.schedule());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct BucketT {
+  pub shape_hint: Option<alloc::boxed::Box<ShapeT>>,
+  pub schedule: Option<alloc::vec::Vec<ScheduleEntryT>>,
+}
+impl Default for BucketT {
+  fn default() -> Self {
+    Self {
+      shape_hint: None,
+      schedule: None,
+    }
+  }
+}
+impl BucketT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<Bucket<'b>> {
+    let shape_hint = self.shape_hint.as_ref().map(|x|{
+      x.pack(_fbb)
+    });
+    let schedule = self.schedule.as_ref().map(|x|{
+      let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
+    });
+    Bucket::create(_fbb, &BucketArgs{
+      shape_hint,
+      schedule,
+    })
+  }
+}
 pub enum EntryPointOffset {}
 #[derive(Copy, Clone, PartialEq)]
 
@@ -1866,6 +2216,9 @@ impl<'a> ::flatbuffers::Follow<'a> for EntryPoint<'a> {
 
 impl<'a> EntryPoint<'a> {
   pub const VT_NAME: ::flatbuffers::VOffsetT = 4;
+  pub const VT_INPUTS: ::flatbuffers::VOffsetT = 6;
+  pub const VT_OUTPUTS: ::flatbuffers::VOffsetT = 8;
+  pub const VT_BUCKETS: ::flatbuffers::VOffsetT = 10;
 
   #[inline]
   pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -1877,6 +2230,9 @@ impl<'a> EntryPoint<'a> {
     args: &'args EntryPointArgs<'args>
   ) -> ::flatbuffers::WIPOffset<EntryPoint<'bldr>> {
     let mut builder = EntryPointBuilder::new(_fbb);
+    if let Some(x) = args.buckets { builder.add_buckets(x); }
+    if let Some(x) = args.outputs { builder.add_outputs(x); }
+    if let Some(x) = args.inputs { builder.add_inputs(x); }
     if let Some(x) = args.name { builder.add_name(x); }
     builder.finish()
   }
@@ -1885,8 +2241,20 @@ impl<'a> EntryPoint<'a> {
     let name = self.name().map(|x| {
       alloc::string::ToString::to_string(x)
     });
+    let inputs = self.inputs().map(|x| {
+      x.into_iter().collect()
+    });
+    let outputs = self.outputs().map(|x| {
+      x.into_iter().collect()
+    });
+    let buckets = self.buckets().map(|x| {
+      x.iter().map(|t| t.unpack()).collect()
+    });
     EntryPointT {
       name,
+      inputs,
+      outputs,
+      buckets,
     }
   }
 
@@ -1897,6 +2265,27 @@ impl<'a> EntryPoint<'a> {
     // which contains a valid value in this slot
     unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<&str>>(EntryPoint::VT_NAME, None)}
   }
+  #[inline]
+  pub fn inputs(&self) -> Option<::flatbuffers::Vector<'a, u32>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, u32>>>(EntryPoint::VT_INPUTS, None)}
+  }
+  #[inline]
+  pub fn outputs(&self) -> Option<::flatbuffers::Vector<'a, u32>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, u32>>>(EntryPoint::VT_OUTPUTS, None)}
+  }
+  #[inline]
+  pub fn buckets(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Bucket<'a>>>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Bucket>>>>(EntryPoint::VT_BUCKETS, None)}
+  }
 }
 
 impl ::flatbuffers::Verifiable for EntryPoint<'_> {
@@ -1906,18 +2295,27 @@ impl ::flatbuffers::Verifiable for EntryPoint<'_> {
   ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
     v.visit_table(pos)?
      .visit_field::<::flatbuffers::ForwardsUOffset<&str>>("name", Self::VT_NAME, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>("inputs", Self::VT_INPUTS, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u32>>>("outputs", Self::VT_OUTPUTS, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<Bucket>>>>("buckets", Self::VT_BUCKETS, false)?
      .finish();
     Ok(())
   }
 }
 pub struct EntryPointArgs<'a> {
     pub name: Option<::flatbuffers::WIPOffset<&'a str>>,
+    pub inputs: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
+    pub outputs: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u32>>>,
+    pub buckets: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Bucket<'a>>>>>,
 }
 impl<'a> Default for EntryPointArgs<'a> {
   #[inline]
   fn default() -> Self {
     EntryPointArgs {
       name: None,
+      inputs: None,
+      outputs: None,
+      buckets: None,
     }
   }
 }
@@ -1930,6 +2328,18 @@ impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> EntryPointBuilder<'a, 'b, A> 
   #[inline]
   pub fn add_name(&mut self, name: ::flatbuffers::WIPOffset<&'b  str>) {
     self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(EntryPoint::VT_NAME, name);
+  }
+  #[inline]
+  pub fn add_inputs(&mut self, inputs: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , u32>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(EntryPoint::VT_INPUTS, inputs);
+  }
+  #[inline]
+  pub fn add_outputs(&mut self, outputs: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , u32>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(EntryPoint::VT_OUTPUTS, outputs);
+  }
+  #[inline]
+  pub fn add_buckets(&mut self, buckets: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<Bucket<'b >>>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(EntryPoint::VT_BUCKETS, buckets);
   }
   #[inline]
   pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> EntryPointBuilder<'a, 'b, A> {
@@ -1950,6 +2360,9 @@ impl ::core::fmt::Debug for EntryPoint<'_> {
   fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
     let mut ds = f.debug_struct("EntryPoint");
       ds.field("name", &self.name());
+      ds.field("inputs", &self.inputs());
+      ds.field("outputs", &self.outputs());
+      ds.field("buckets", &self.buckets());
       ds.finish()
   }
 }
@@ -1957,11 +2370,17 @@ impl ::core::fmt::Debug for EntryPoint<'_> {
 #[derive(Debug, Clone, PartialEq)]
 pub struct EntryPointT {
   pub name: Option<alloc::string::String>,
+  pub inputs: Option<alloc::vec::Vec<u32>>,
+  pub outputs: Option<alloc::vec::Vec<u32>>,
+  pub buckets: Option<alloc::vec::Vec<BucketT>>,
 }
 impl Default for EntryPointT {
   fn default() -> Self {
     Self {
       name: None,
+      inputs: None,
+      outputs: None,
+      buckets: None,
     }
   }
 }
@@ -1973,8 +2392,20 @@ impl EntryPointT {
     let name = self.name.as_ref().map(|x|{
       _fbb.create_string(x)
     });
+    let inputs = self.inputs.as_ref().map(|x|{
+      _fbb.create_vector(x)
+    });
+    let outputs = self.outputs.as_ref().map(|x|{
+      _fbb.create_vector(x)
+    });
+    let buckets = self.buckets.as_ref().map(|x|{
+      let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
+    });
     EntryPoint::create(_fbb, &EntryPointArgs{
       name,
+      inputs,
+      outputs,
+      buckets,
     })
   }
 }
