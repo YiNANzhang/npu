@@ -1,0 +1,30 @@
+// npug.fbs — Auto-NPU deployment container ABI v0.1
+// DO NOT EDIT generated code; edit this file and rebuild.
+
+namespace Npug;
+
+enum AbiVersion : uint32 {
+    Unknown = 0,
+    // Encoded as (major<<16) | (minor<<8) | patch
+    V0_1_0 = 0x000100,
+}
+
+enum TargetId : uint32 {
+    Unknown      = 0,
+    AutoSocV1    = 1,  // 车规 SoC, 64 Tile, 2097 INT8 TOPS
+}
+
+table Graph {
+    abi_version : AbiVersion;
+    target      : TargetId;
+    producer    : string;   // e.g. "npuc/0.1.0+abc123"
+    entry_points: [EntryPoint];
+}
+
+table EntryPoint {
+    name : string;   // placeholder until Task 10
+}
+
+root_type Graph;
+file_identifier "NPUG";
+file_extension "npug";
