@@ -175,6 +175,629 @@ impl<'a> ::flatbuffers::Verifiable for TargetId {
 }
 
 impl ::flatbuffers::SimpleToVerifyInSlice for TargetId {}
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MIN_DTYPE: u8 = 0;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MAX_DTYPE: u8 = 14;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+#[allow(non_camel_case_types)]
+pub const ENUM_VALUES_DTYPE: [DType; 15] = [
+  DType::Unknown,
+  DType::Int4,
+  DType::Int8,
+  DType::MxInt4,
+  DType::MxInt8,
+  DType::MxFp4,
+  DType::MxFp8,
+  DType::MxFp16,
+  DType::NvFp4,
+  DType::NvFp8,
+  DType::Fp16,
+  DType::Bf16,
+  DType::Fp32,
+  DType::E8M0Scale,
+  DType::E4M3Scale,
+];
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[repr(transparent)]
+pub struct DType(pub u8);
+#[allow(non_upper_case_globals)]
+impl DType {
+  pub const Unknown: Self = Self(0);
+  pub const Int4: Self = Self(1);
+  pub const Int8: Self = Self(2);
+  pub const MxInt4: Self = Self(3);
+  pub const MxInt8: Self = Self(4);
+  pub const MxFp4: Self = Self(5);
+  pub const MxFp8: Self = Self(6);
+  pub const MxFp16: Self = Self(7);
+  pub const NvFp4: Self = Self(8);
+  pub const NvFp8: Self = Self(9);
+  pub const Fp16: Self = Self(10);
+  pub const Bf16: Self = Self(11);
+  pub const Fp32: Self = Self(12);
+  pub const E8M0Scale: Self = Self(13);
+  pub const E4M3Scale: Self = Self(14);
+
+  pub const ENUM_MIN: u8 = 0;
+  pub const ENUM_MAX: u8 = 14;
+  pub const ENUM_VALUES: &'static [Self] = &[
+    Self::Unknown,
+    Self::Int4,
+    Self::Int8,
+    Self::MxInt4,
+    Self::MxInt8,
+    Self::MxFp4,
+    Self::MxFp8,
+    Self::MxFp16,
+    Self::NvFp4,
+    Self::NvFp8,
+    Self::Fp16,
+    Self::Bf16,
+    Self::Fp32,
+    Self::E8M0Scale,
+    Self::E4M3Scale,
+  ];
+  /// Returns the variant's name or "" if unknown.
+  pub fn variant_name(self) -> Option<&'static str> {
+    match self {
+      Self::Unknown => Some("Unknown"),
+      Self::Int4 => Some("Int4"),
+      Self::Int8 => Some("Int8"),
+      Self::MxInt4 => Some("MxInt4"),
+      Self::MxInt8 => Some("MxInt8"),
+      Self::MxFp4 => Some("MxFp4"),
+      Self::MxFp8 => Some("MxFp8"),
+      Self::MxFp16 => Some("MxFp16"),
+      Self::NvFp4 => Some("NvFp4"),
+      Self::NvFp8 => Some("NvFp8"),
+      Self::Fp16 => Some("Fp16"),
+      Self::Bf16 => Some("Bf16"),
+      Self::Fp32 => Some("Fp32"),
+      Self::E8M0Scale => Some("E8M0Scale"),
+      Self::E4M3Scale => Some("E4M3Scale"),
+      _ => None,
+    }
+  }
+}
+impl ::core::fmt::Debug for DType {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+    if let Some(name) = self.variant_name() {
+      f.write_str(name)
+    } else {
+      f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+    }
+  }
+}
+impl<'a> ::flatbuffers::Follow<'a> for DType {
+  type Inner = Self;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+    Self(b)
+  }
+}
+
+impl ::flatbuffers::Push for DType {
+    type Output = DType;
+    #[inline]
+    unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+        unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+    }
+}
+
+impl ::flatbuffers::EndianScalar for DType {
+  type Scalar = u8;
+  #[inline]
+  fn to_little_endian(self) -> u8 {
+    self.0.to_le()
+  }
+  #[inline]
+  #[allow(clippy::wrong_self_convention)]
+  fn from_little_endian(v: u8) -> Self {
+    let b = u8::from_le(v);
+    Self(b)
+  }
+}
+
+impl<'a> ::flatbuffers::Verifiable for DType {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    u8::run_verifier(v, pos)
+  }
+}
+
+impl ::flatbuffers::SimpleToVerifyInSlice for DType {}
+pub enum ShapeOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct Shape<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for Shape<'a> {
+  type Inner = Shape<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> Shape<'a> {
+  pub const VT_DIMS: ::flatbuffers::VOffsetT = 4;
+  pub const VT_SYMBOL_NAMES: ::flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    Shape { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args ShapeArgs<'args>
+  ) -> ::flatbuffers::WIPOffset<Shape<'bldr>> {
+    let mut builder = ShapeBuilder::new(_fbb);
+    if let Some(x) = args.symbol_names { builder.add_symbol_names(x); }
+    if let Some(x) = args.dims { builder.add_dims(x); }
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> ShapeT {
+    let dims = self.dims().map(|x| {
+      x.into_iter().collect()
+    });
+    let symbol_names = self.symbol_names().map(|x| {
+      x.iter().map(|s| alloc::string::ToString::to_string(s)).collect()
+    });
+    ShapeT {
+      dims,
+      symbol_names,
+    }
+  }
+
+  #[inline]
+  pub fn dims(&self) -> Option<::flatbuffers::Vector<'a, i64>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, i64>>>(Shape::VT_DIMS, None)}
+  }
+  #[inline]
+  pub fn symbol_names(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<&'a str>>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<&'a str>>>>(Shape::VT_SYMBOL_NAMES, None)}
+  }
+}
+
+impl ::flatbuffers::Verifiable for Shape<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, i64>>>("dims", Self::VT_DIMS, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<&'_ str>>>>("symbol_names", Self::VT_SYMBOL_NAMES, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct ShapeArgs<'a> {
+    pub dims: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, i64>>>,
+    pub symbol_names: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<&'a str>>>>,
+}
+impl<'a> Default for ShapeArgs<'a> {
+  #[inline]
+  fn default() -> Self {
+    ShapeArgs {
+      dims: None,
+      symbol_names: None,
+    }
+  }
+}
+
+pub struct ShapeBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> ShapeBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_dims(&mut self, dims: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , i64>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Shape::VT_DIMS, dims);
+  }
+  #[inline]
+  pub fn add_symbol_names(&mut self, symbol_names: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<&'b  str>>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Shape::VT_SYMBOL_NAMES, symbol_names);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> ShapeBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    ShapeBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<Shape<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for Shape<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("Shape");
+      ds.field("dims", &self.dims());
+      ds.field("symbol_names", &self.symbol_names());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ShapeT {
+  pub dims: Option<alloc::vec::Vec<i64>>,
+  pub symbol_names: Option<alloc::vec::Vec<alloc::string::String>>,
+}
+impl Default for ShapeT {
+  fn default() -> Self {
+    Self {
+      dims: None,
+      symbol_names: None,
+    }
+  }
+}
+impl ShapeT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<Shape<'b>> {
+    let dims = self.dims.as_ref().map(|x|{
+      _fbb.create_vector(x)
+    });
+    let symbol_names = self.symbol_names.as_ref().map(|x|{
+      let w: alloc::vec::Vec<_> = x.iter().map(|s| _fbb.create_string(s)).collect();_fbb.create_vector(&w)
+    });
+    Shape::create(_fbb, &ShapeArgs{
+      dims,
+      symbol_names,
+    })
+  }
+}
+pub enum BufferOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct Buffer<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for Buffer<'a> {
+  type Inner = Buffer<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> Buffer<'a> {
+  pub const VT_DATA: ::flatbuffers::VOffsetT = 4;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    Buffer { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args BufferArgs<'args>
+  ) -> ::flatbuffers::WIPOffset<Buffer<'bldr>> {
+    let mut builder = BufferBuilder::new(_fbb);
+    if let Some(x) = args.data { builder.add_data(x); }
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> BufferT {
+    let data = self.data().map(|x| {
+      x.into_iter().collect()
+    });
+    BufferT {
+      data,
+    }
+  }
+
+  #[inline]
+  pub fn data(&self) -> Option<::flatbuffers::Vector<'a, u8>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, u8>>>(Buffer::VT_DATA, None)}
+  }
+}
+
+impl ::flatbuffers::Verifiable for Buffer<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, u8>>>("data", Self::VT_DATA, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct BufferArgs<'a> {
+    pub data: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, u8>>>,
+}
+impl<'a> Default for BufferArgs<'a> {
+  #[inline]
+  fn default() -> Self {
+    BufferArgs {
+      data: None,
+    }
+  }
+}
+
+pub struct BufferBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> BufferBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_data(&mut self, data: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , u8>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Buffer::VT_DATA, data);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> BufferBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    BufferBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<Buffer<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for Buffer<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("Buffer");
+      ds.field("data", &self.data());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct BufferT {
+  pub data: Option<alloc::vec::Vec<u8>>,
+}
+impl Default for BufferT {
+  fn default() -> Self {
+    Self {
+      data: None,
+    }
+  }
+}
+impl BufferT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<Buffer<'b>> {
+    let data = self.data.as_ref().map(|x|{
+      _fbb.create_vector(x)
+    });
+    Buffer::create(_fbb, &BufferArgs{
+      data,
+    })
+  }
+}
+pub enum TensorOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct Tensor<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for Tensor<'a> {
+  type Inner = Tensor<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> Tensor<'a> {
+  pub const VT_NAME: ::flatbuffers::VOffsetT = 4;
+  pub const VT_DTYPE: ::flatbuffers::VOffsetT = 6;
+  pub const VT_SHAPE: ::flatbuffers::VOffsetT = 8;
+  pub const VT_BUFFER: ::flatbuffers::VOffsetT = 10;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    Tensor { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args TensorArgs<'args>
+  ) -> ::flatbuffers::WIPOffset<Tensor<'bldr>> {
+    let mut builder = TensorBuilder::new(_fbb);
+    builder.add_buffer(args.buffer);
+    if let Some(x) = args.shape { builder.add_shape(x); }
+    if let Some(x) = args.name { builder.add_name(x); }
+    builder.add_dtype(args.dtype);
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> TensorT {
+    let name = self.name().map(|x| {
+      alloc::string::ToString::to_string(x)
+    });
+    let dtype = self.dtype();
+    let shape = self.shape().map(|x| {
+      alloc::boxed::Box::new(x.unpack())
+    });
+    let buffer = self.buffer();
+    TensorT {
+      name,
+      dtype,
+      shape,
+      buffer,
+    }
+  }
+
+  #[inline]
+  pub fn name(&self) -> Option<&'a str> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<&str>>(Tensor::VT_NAME, None)}
+  }
+  #[inline]
+  pub fn dtype(&self) -> DType {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<DType>(Tensor::VT_DTYPE, Some(DType::Unknown)).unwrap()}
+  }
+  #[inline]
+  pub fn shape(&self) -> Option<Shape<'a>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<Shape>>(Tensor::VT_SHAPE, None)}
+  }
+  #[inline]
+  pub fn buffer(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(Tensor::VT_BUFFER, Some(4294967295)).unwrap()}
+  }
+}
+
+impl ::flatbuffers::Verifiable for Tensor<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<&str>>("name", Self::VT_NAME, false)?
+     .visit_field::<DType>("dtype", Self::VT_DTYPE, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<Shape>>("shape", Self::VT_SHAPE, false)?
+     .visit_field::<u32>("buffer", Self::VT_BUFFER, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct TensorArgs<'a> {
+    pub name: Option<::flatbuffers::WIPOffset<&'a str>>,
+    pub dtype: DType,
+    pub shape: Option<::flatbuffers::WIPOffset<Shape<'a>>>,
+    pub buffer: u32,
+}
+impl<'a> Default for TensorArgs<'a> {
+  #[inline]
+  fn default() -> Self {
+    TensorArgs {
+      name: None,
+      dtype: DType::Unknown,
+      shape: None,
+      buffer: 4294967295,
+    }
+  }
+}
+
+pub struct TensorBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> TensorBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_name(&mut self, name: ::flatbuffers::WIPOffset<&'b  str>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Tensor::VT_NAME, name);
+  }
+  #[inline]
+  pub fn add_dtype(&mut self, dtype: DType) {
+    self.fbb_.push_slot::<DType>(Tensor::VT_DTYPE, dtype, DType::Unknown);
+  }
+  #[inline]
+  pub fn add_shape(&mut self, shape: ::flatbuffers::WIPOffset<Shape<'b >>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<Shape>>(Tensor::VT_SHAPE, shape);
+  }
+  #[inline]
+  pub fn add_buffer(&mut self, buffer: u32) {
+    self.fbb_.push_slot::<u32>(Tensor::VT_BUFFER, buffer, 4294967295);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> TensorBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    TensorBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<Tensor<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for Tensor<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("Tensor");
+      ds.field("name", &self.name());
+      ds.field("dtype", &self.dtype());
+      ds.field("shape", &self.shape());
+      ds.field("buffer", &self.buffer());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct TensorT {
+  pub name: Option<alloc::string::String>,
+  pub dtype: DType,
+  pub shape: Option<alloc::boxed::Box<ShapeT>>,
+  pub buffer: u32,
+}
+impl Default for TensorT {
+  fn default() -> Self {
+    Self {
+      name: None,
+      dtype: DType::Unknown,
+      shape: None,
+      buffer: 4294967295,
+    }
+  }
+}
+impl TensorT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<Tensor<'b>> {
+    let name = self.name.as_ref().map(|x|{
+      _fbb.create_string(x)
+    });
+    let dtype = self.dtype;
+    let shape = self.shape.as_ref().map(|x|{
+      x.pack(_fbb)
+    });
+    let buffer = self.buffer;
+    Tensor::create(_fbb, &TensorArgs{
+      name,
+      dtype,
+      shape,
+      buffer,
+    })
+  }
+}
 pub enum GraphOffset {}
 #[derive(Copy, Clone, PartialEq)]
 
@@ -194,7 +817,9 @@ impl<'a> Graph<'a> {
   pub const VT_ABI_VERSION: ::flatbuffers::VOffsetT = 4;
   pub const VT_TARGET: ::flatbuffers::VOffsetT = 6;
   pub const VT_PRODUCER: ::flatbuffers::VOffsetT = 8;
-  pub const VT_ENTRY_POINTS: ::flatbuffers::VOffsetT = 10;
+  pub const VT_TENSORS: ::flatbuffers::VOffsetT = 10;
+  pub const VT_BUFFERS: ::flatbuffers::VOffsetT = 12;
+  pub const VT_ENTRY_POINTS: ::flatbuffers::VOffsetT = 14;
 
   #[inline]
   pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -207,6 +832,8 @@ impl<'a> Graph<'a> {
   ) -> ::flatbuffers::WIPOffset<Graph<'bldr>> {
     let mut builder = GraphBuilder::new(_fbb);
     if let Some(x) = args.entry_points { builder.add_entry_points(x); }
+    if let Some(x) = args.buffers { builder.add_buffers(x); }
+    if let Some(x) = args.tensors { builder.add_tensors(x); }
     if let Some(x) = args.producer { builder.add_producer(x); }
     builder.add_target(args.target);
     builder.add_abi_version(args.abi_version);
@@ -219,6 +846,12 @@ impl<'a> Graph<'a> {
     let producer = self.producer().map(|x| {
       alloc::string::ToString::to_string(x)
     });
+    let tensors = self.tensors().map(|x| {
+      x.iter().map(|t| t.unpack()).collect()
+    });
+    let buffers = self.buffers().map(|x| {
+      x.iter().map(|t| t.unpack()).collect()
+    });
     let entry_points = self.entry_points().map(|x| {
       x.iter().map(|t| t.unpack()).collect()
     });
@@ -226,6 +859,8 @@ impl<'a> Graph<'a> {
       abi_version,
       target,
       producer,
+      tensors,
+      buffers,
       entry_points,
     }
   }
@@ -252,6 +887,20 @@ impl<'a> Graph<'a> {
     unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<&str>>(Graph::VT_PRODUCER, None)}
   }
   #[inline]
+  pub fn tensors(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Tensor<'a>>>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Tensor>>>>(Graph::VT_TENSORS, None)}
+  }
+  #[inline]
+  pub fn buffers(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Buffer<'a>>>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Buffer>>>>(Graph::VT_BUFFERS, None)}
+  }
+  #[inline]
   pub fn entry_points(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<EntryPoint<'a>>>> {
     // Safety:
     // Created from valid Table for this object
@@ -269,6 +918,8 @@ impl ::flatbuffers::Verifiable for Graph<'_> {
      .visit_field::<AbiVersion>("abi_version", Self::VT_ABI_VERSION, false)?
      .visit_field::<TargetId>("target", Self::VT_TARGET, false)?
      .visit_field::<::flatbuffers::ForwardsUOffset<&str>>("producer", Self::VT_PRODUCER, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<Tensor>>>>("tensors", Self::VT_TENSORS, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<Buffer>>>>("buffers", Self::VT_BUFFERS, false)?
      .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<EntryPoint>>>>("entry_points", Self::VT_ENTRY_POINTS, false)?
      .finish();
     Ok(())
@@ -278,6 +929,8 @@ pub struct GraphArgs<'a> {
     pub abi_version: AbiVersion,
     pub target: TargetId,
     pub producer: Option<::flatbuffers::WIPOffset<&'a str>>,
+    pub tensors: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Tensor<'a>>>>>,
+    pub buffers: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Buffer<'a>>>>>,
     pub entry_points: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<EntryPoint<'a>>>>>,
 }
 impl<'a> Default for GraphArgs<'a> {
@@ -287,6 +940,8 @@ impl<'a> Default for GraphArgs<'a> {
       abi_version: AbiVersion::Unknown,
       target: TargetId::Unknown,
       producer: None,
+      tensors: None,
+      buffers: None,
       entry_points: None,
     }
   }
@@ -308,6 +963,14 @@ impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> GraphBuilder<'a, 'b, A> {
   #[inline]
   pub fn add_producer(&mut self, producer: ::flatbuffers::WIPOffset<&'b  str>) {
     self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Graph::VT_PRODUCER, producer);
+  }
+  #[inline]
+  pub fn add_tensors(&mut self, tensors: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<Tensor<'b >>>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Graph::VT_TENSORS, tensors);
+  }
+  #[inline]
+  pub fn add_buffers(&mut self, buffers: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<Buffer<'b >>>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Graph::VT_BUFFERS, buffers);
   }
   #[inline]
   pub fn add_entry_points(&mut self, entry_points: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<EntryPoint<'b >>>>) {
@@ -334,6 +997,8 @@ impl ::core::fmt::Debug for Graph<'_> {
       ds.field("abi_version", &self.abi_version());
       ds.field("target", &self.target());
       ds.field("producer", &self.producer());
+      ds.field("tensors", &self.tensors());
+      ds.field("buffers", &self.buffers());
       ds.field("entry_points", &self.entry_points());
       ds.finish()
   }
@@ -344,6 +1009,8 @@ pub struct GraphT {
   pub abi_version: AbiVersion,
   pub target: TargetId,
   pub producer: Option<alloc::string::String>,
+  pub tensors: Option<alloc::vec::Vec<TensorT>>,
+  pub buffers: Option<alloc::vec::Vec<BufferT>>,
   pub entry_points: Option<alloc::vec::Vec<EntryPointT>>,
 }
 impl Default for GraphT {
@@ -352,6 +1019,8 @@ impl Default for GraphT {
       abi_version: AbiVersion::Unknown,
       target: TargetId::Unknown,
       producer: None,
+      tensors: None,
+      buffers: None,
       entry_points: None,
     }
   }
@@ -366,6 +1035,12 @@ impl GraphT {
     let producer = self.producer.as_ref().map(|x|{
       _fbb.create_string(x)
     });
+    let tensors = self.tensors.as_ref().map(|x|{
+      let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
+    });
+    let buffers = self.buffers.as_ref().map(|x|{
+      let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
+    });
     let entry_points = self.entry_points.as_ref().map(|x|{
       let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
     });
@@ -373,6 +1048,8 @@ impl GraphT {
       abi_version,
       target,
       producer,
+      tensors,
+      buffers,
       entry_points,
     })
   }

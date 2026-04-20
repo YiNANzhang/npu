@@ -1,28 +1,60 @@
-// npug.fbs — Auto-NPU deployment container ABI v0.1
-// DO NOT EDIT generated code; edit this file and rebuild.
-
 namespace Npug;
 
 enum AbiVersion : uint32 {
     Unknown = 0,
-    // Encoded as (major<<16) | (minor<<8) | patch
-    V0_1_0 = 0x000100,
+    V0_1_0  = 0x000100,
 }
 
 enum TargetId : uint32 {
-    Unknown      = 0,
-    AutoSocV1    = 1,  // 车规 SoC, 64 Tile, 2097 INT8 TOPS
+    Unknown   = 0,
+    AutoSocV1 = 1,
+}
+
+enum DType : uint8 {
+    Unknown   = 0,
+    Int4      = 1,
+    Int8      = 2,
+    MxInt4    = 3,
+    MxInt8    = 4,
+    MxFp4     = 5,
+    MxFp8     = 6,
+    MxFp16    = 7,
+    NvFp4     = 8,
+    NvFp8     = 9,
+    Fp16      = 10,
+    Bf16      = 11,
+    Fp32      = 12,
+    E8M0Scale = 13,   // for MX
+    E4M3Scale = 14,   // for NV
+}
+
+table Shape {
+    dims         : [int64];     // -1 = symbolic
+    symbol_names : [string];    // parallel to dims; "" when static
+}
+
+table Buffer {
+    data : [ubyte];
+}
+
+table Tensor {
+    name   : string;
+    dtype  : DType;
+    shape  : Shape;
+    buffer : uint32 = 0xffffffff;  // 0xffffffff = no buffer (activation placeholder)
 }
 
 table Graph {
-    abi_version : AbiVersion;
-    target      : TargetId;
-    producer    : string;   // e.g. "npuc/0.1.0+abc123"
-    entry_points: [EntryPoint];
+    abi_version  : AbiVersion;
+    target       : TargetId;
+    producer     : string;
+    tensors      : [Tensor];
+    buffers      : [Buffer];
+    entry_points : [EntryPoint];
 }
 
 table EntryPoint {
-    name : string;   // placeholder until Task 10
+    name : string;
 }
 
 root_type Graph;

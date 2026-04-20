@@ -12,7 +12,3 @@ thiserror.workspace = true
 
 [build-dependencies]
 flatbuffers.workspace = true
-
-[[example]]
-name = "inspect"
-path = "examples/inspect.rs"
