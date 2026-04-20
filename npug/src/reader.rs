@@ -2,6 +2,13 @@ use crate::error::{Error, Result};
 use crate::generated::npug as fb;
 use crate::version;
 
+pub struct KernelView {
+    pub name: String,
+    pub kind: fb::KernelKind,
+    pub buffer: u32,
+    pub entry_offset: u64,
+}
+
 pub struct QuantView {
     pub scheme: fb::QuantScheme,
     pub scale_buffer: Option<u32>,
@@ -104,6 +111,22 @@ impl<'a> GraphReader<'a> {
             .and_then(|v| v.get(idx as usize).data())
             .map(|d| d.bytes())
             .unwrap_or(&[])
+    }
+
+    pub fn kernels(&self) -> Vec<KernelView> {
+        self.graph
+            .kernels()
+            .map(|v| {
+                v.iter()
+                    .map(|k| KernelView {
+                        name: k.name().unwrap_or("").to_string(),
+                        kind: k.kind(),
+                        buffer: k.buffer(),
+                        entry_offset: k.entry_offset(),
+                    })
+                    .collect()
+            })
+            .unwrap_or_default()
     }
 
     pub fn as_bytes(&self) -> &'a [u8] { self.bytes }

@@ -17,3 +17,4 @@ pub use error::{Error, Result};
 pub use generated::npug::DType;
 pub use generated::npug::TargetId;
 pub use generated::npug::{MemoryRegion, QuantScheme};
+pub use generated::npug::KernelKind;

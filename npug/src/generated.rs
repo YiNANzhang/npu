@@ -503,6 +503,94 @@ impl<'a> ::flatbuffers::Verifiable for MemoryRegion {
 }
 
 impl ::flatbuffers::SimpleToVerifyInSlice for MemoryRegion {}
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MIN_KERNEL_KIND: u8 = 0;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MAX_KERNEL_KIND: u8 = 2;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+#[allow(non_camel_case_types)]
+pub const ENUM_VALUES_KERNEL_KIND: [KernelKind; 3] = [
+  KernelKind::Unknown,
+  KernelKind::TileUcBin,
+  KernelKind::SchedMcuBin,
+];
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[repr(transparent)]
+pub struct KernelKind(pub u8);
+#[allow(non_upper_case_globals)]
+impl KernelKind {
+  pub const Unknown: Self = Self(0);
+  pub const TileUcBin: Self = Self(1);
+  pub const SchedMcuBin: Self = Self(2);
+
+  pub const ENUM_MIN: u8 = 0;
+  pub const ENUM_MAX: u8 = 2;
+  pub const ENUM_VALUES: &'static [Self] = &[
+    Self::Unknown,
+    Self::TileUcBin,
+    Self::SchedMcuBin,
+  ];
+  /// Returns the variant's name or "" if unknown.
+  pub fn variant_name(self) -> Option<&'static str> {
+    match self {
+      Self::Unknown => Some("Unknown"),
+      Self::TileUcBin => Some("TileUcBin"),
+      Self::SchedMcuBin => Some("SchedMcuBin"),
+      _ => None,
+    }
+  }
+}
+impl ::core::fmt::Debug for KernelKind {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+    if let Some(name) = self.variant_name() {
+      f.write_str(name)
+    } else {
+      f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+    }
+  }
+}
+impl<'a> ::flatbuffers::Follow<'a> for KernelKind {
+  type Inner = Self;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    let b = unsafe { ::flatbuffers::read_scalar_at::<u8>(buf, loc) };
+    Self(b)
+  }
+}
+
+impl ::flatbuffers::Push for KernelKind {
+    type Output = KernelKind;
+    #[inline]
+    unsafe fn push(&self, dst: &mut [u8], _written_len: usize) {
+        unsafe { ::flatbuffers::emplace_scalar::<u8>(dst, self.0) };
+    }
+}
+
+impl ::flatbuffers::EndianScalar for KernelKind {
+  type Scalar = u8;
+  #[inline]
+  fn to_little_endian(self) -> u8 {
+    self.0.to_le()
+  }
+  #[inline]
+  #[allow(clippy::wrong_self_convention)]
+  fn from_little_endian(v: u8) -> Self {
+    let b = u8::from_le(v);
+    Self(b)
+  }
+}
+
+impl<'a> ::flatbuffers::Verifiable for KernelKind {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    u8::run_verifier(v, pos)
+  }
+}
+
+impl ::flatbuffers::SimpleToVerifyInSlice for KernelKind {}
 pub enum ShapeOffset {}
 #[derive(Copy, Clone, PartialEq)]
 
@@ -1280,6 +1368,204 @@ impl TensorT {
     })
   }
 }
+pub enum KernelOffset {}
+#[derive(Copy, Clone, PartialEq)]
+
+pub struct Kernel<'a> {
+  pub _tab: ::flatbuffers::Table<'a>,
+}
+
+impl<'a> ::flatbuffers::Follow<'a> for Kernel<'a> {
+  type Inner = Kernel<'a>;
+  #[inline]
+  unsafe fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    Self { _tab: unsafe { ::flatbuffers::Table::new(buf, loc) } }
+  }
+}
+
+impl<'a> Kernel<'a> {
+  pub const VT_NAME: ::flatbuffers::VOffsetT = 4;
+  pub const VT_KIND: ::flatbuffers::VOffsetT = 6;
+  pub const VT_BUFFER: ::flatbuffers::VOffsetT = 8;
+  pub const VT_ENTRY_OFFSET: ::flatbuffers::VOffsetT = 10;
+
+  #[inline]
+  pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
+    Kernel { _tab: table }
+  }
+  #[allow(unused_mut)]
+  pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr, A: ::flatbuffers::Allocator + 'bldr>(
+    _fbb: &'mut_bldr mut ::flatbuffers::FlatBufferBuilder<'bldr, A>,
+    args: &'args KernelArgs<'args>
+  ) -> ::flatbuffers::WIPOffset<Kernel<'bldr>> {
+    let mut builder = KernelBuilder::new(_fbb);
+    builder.add_entry_offset(args.entry_offset);
+    builder.add_buffer(args.buffer);
+    if let Some(x) = args.name { builder.add_name(x); }
+    builder.add_kind(args.kind);
+    builder.finish()
+  }
+
+  pub fn unpack(&self) -> KernelT {
+    let name = self.name().map(|x| {
+      alloc::string::ToString::to_string(x)
+    });
+    let kind = self.kind();
+    let buffer = self.buffer();
+    let entry_offset = self.entry_offset();
+    KernelT {
+      name,
+      kind,
+      buffer,
+      entry_offset,
+    }
+  }
+
+  #[inline]
+  pub fn name(&self) -> Option<&'a str> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<&str>>(Kernel::VT_NAME, None)}
+  }
+  #[inline]
+  pub fn kind(&self) -> KernelKind {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<KernelKind>(Kernel::VT_KIND, Some(KernelKind::Unknown)).unwrap()}
+  }
+  #[inline]
+  pub fn buffer(&self) -> u32 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u32>(Kernel::VT_BUFFER, Some(0)).unwrap()}
+  }
+  #[inline]
+  pub fn entry_offset(&self) -> u64 {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<u64>(Kernel::VT_ENTRY_OFFSET, Some(0)).unwrap()}
+  }
+}
+
+impl ::flatbuffers::Verifiable for Kernel<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut ::flatbuffers::Verifier, pos: usize
+  ) -> Result<(), ::flatbuffers::InvalidFlatbuffer> {
+    v.visit_table(pos)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<&str>>("name", Self::VT_NAME, false)?
+     .visit_field::<KernelKind>("kind", Self::VT_KIND, false)?
+     .visit_field::<u32>("buffer", Self::VT_BUFFER, false)?
+     .visit_field::<u64>("entry_offset", Self::VT_ENTRY_OFFSET, false)?
+     .finish();
+    Ok(())
+  }
+}
+pub struct KernelArgs<'a> {
+    pub name: Option<::flatbuffers::WIPOffset<&'a str>>,
+    pub kind: KernelKind,
+    pub buffer: u32,
+    pub entry_offset: u64,
+}
+impl<'a> Default for KernelArgs<'a> {
+  #[inline]
+  fn default() -> Self {
+    KernelArgs {
+      name: None,
+      kind: KernelKind::Unknown,
+      buffer: 0,
+      entry_offset: 0,
+    }
+  }
+}
+
+pub struct KernelBuilder<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> {
+  fbb_: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>,
+  start_: ::flatbuffers::WIPOffset<::flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> KernelBuilder<'a, 'b, A> {
+  #[inline]
+  pub fn add_name(&mut self, name: ::flatbuffers::WIPOffset<&'b  str>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Kernel::VT_NAME, name);
+  }
+  #[inline]
+  pub fn add_kind(&mut self, kind: KernelKind) {
+    self.fbb_.push_slot::<KernelKind>(Kernel::VT_KIND, kind, KernelKind::Unknown);
+  }
+  #[inline]
+  pub fn add_buffer(&mut self, buffer: u32) {
+    self.fbb_.push_slot::<u32>(Kernel::VT_BUFFER, buffer, 0);
+  }
+  #[inline]
+  pub fn add_entry_offset(&mut self, entry_offset: u64) {
+    self.fbb_.push_slot::<u64>(Kernel::VT_ENTRY_OFFSET, entry_offset, 0);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut ::flatbuffers::FlatBufferBuilder<'a, A>) -> KernelBuilder<'a, 'b, A> {
+    let start = _fbb.start_table();
+    KernelBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> ::flatbuffers::WIPOffset<Kernel<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    ::flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+impl ::core::fmt::Debug for Kernel<'_> {
+  fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+    let mut ds = f.debug_struct("Kernel");
+      ds.field("name", &self.name());
+      ds.field("kind", &self.kind());
+      ds.field("buffer", &self.buffer());
+      ds.field("entry_offset", &self.entry_offset());
+      ds.finish()
+  }
+}
+#[non_exhaustive]
+#[derive(Debug, Clone, PartialEq)]
+pub struct KernelT {
+  pub name: Option<alloc::string::String>,
+  pub kind: KernelKind,
+  pub buffer: u32,
+  pub entry_offset: u64,
+}
+impl Default for KernelT {
+  fn default() -> Self {
+    Self {
+      name: None,
+      kind: KernelKind::Unknown,
+      buffer: 0,
+      entry_offset: 0,
+    }
+  }
+}
+impl KernelT {
+  pub fn pack<'b, A: ::flatbuffers::Allocator + 'b>(
+    &self,
+    _fbb: &mut ::flatbuffers::FlatBufferBuilder<'b, A>
+  ) -> ::flatbuffers::WIPOffset<Kernel<'b>> {
+    let name = self.name.as_ref().map(|x|{
+      _fbb.create_string(x)
+    });
+    let kind = self.kind;
+    let buffer = self.buffer;
+    let entry_offset = self.entry_offset;
+    Kernel::create(_fbb, &KernelArgs{
+      name,
+      kind,
+      buffer,
+      entry_offset,
+    })
+  }
+}
 pub enum GraphOffset {}
 #[derive(Copy, Clone, PartialEq)]
 
@@ -1301,7 +1587,8 @@ impl<'a> Graph<'a> {
   pub const VT_PRODUCER: ::flatbuffers::VOffsetT = 8;
   pub const VT_TENSORS: ::flatbuffers::VOffsetT = 10;
   pub const VT_BUFFERS: ::flatbuffers::VOffsetT = 12;
-  pub const VT_ENTRY_POINTS: ::flatbuffers::VOffsetT = 14;
+  pub const VT_KERNELS: ::flatbuffers::VOffsetT = 14;
+  pub const VT_ENTRY_POINTS: ::flatbuffers::VOffsetT = 16;
 
   #[inline]
   pub unsafe fn init_from_table(table: ::flatbuffers::Table<'a>) -> Self {
@@ -1314,6 +1601,7 @@ impl<'a> Graph<'a> {
   ) -> ::flatbuffers::WIPOffset<Graph<'bldr>> {
     let mut builder = GraphBuilder::new(_fbb);
     if let Some(x) = args.entry_points { builder.add_entry_points(x); }
+    if let Some(x) = args.kernels { builder.add_kernels(x); }
     if let Some(x) = args.buffers { builder.add_buffers(x); }
     if let Some(x) = args.tensors { builder.add_tensors(x); }
     if let Some(x) = args.producer { builder.add_producer(x); }
@@ -1334,6 +1622,9 @@ impl<'a> Graph<'a> {
     let buffers = self.buffers().map(|x| {
       x.iter().map(|t| t.unpack()).collect()
     });
+    let kernels = self.kernels().map(|x| {
+      x.iter().map(|t| t.unpack()).collect()
+    });
     let entry_points = self.entry_points().map(|x| {
       x.iter().map(|t| t.unpack()).collect()
     });
@@ -1343,6 +1634,7 @@ impl<'a> Graph<'a> {
       producer,
       tensors,
       buffers,
+      kernels,
       entry_points,
     }
   }
@@ -1383,6 +1675,13 @@ impl<'a> Graph<'a> {
     unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Buffer>>>>(Graph::VT_BUFFERS, None)}
   }
   #[inline]
+  pub fn kernels(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Kernel<'a>>>> {
+    // Safety:
+    // Created from valid Table for this object
+    // which contains a valid value in this slot
+    unsafe { self._tab.get::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Kernel>>>>(Graph::VT_KERNELS, None)}
+  }
+  #[inline]
   pub fn entry_points(&self) -> Option<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<EntryPoint<'a>>>> {
     // Safety:
     // Created from valid Table for this object
@@ -1402,6 +1701,7 @@ impl ::flatbuffers::Verifiable for Graph<'_> {
      .visit_field::<::flatbuffers::ForwardsUOffset<&str>>("producer", Self::VT_PRODUCER, false)?
      .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<Tensor>>>>("tensors", Self::VT_TENSORS, false)?
      .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<Buffer>>>>("buffers", Self::VT_BUFFERS, false)?
+     .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<Kernel>>>>("kernels", Self::VT_KERNELS, false)?
      .visit_field::<::flatbuffers::ForwardsUOffset<::flatbuffers::Vector<'_, ::flatbuffers::ForwardsUOffset<EntryPoint>>>>("entry_points", Self::VT_ENTRY_POINTS, false)?
      .finish();
     Ok(())
@@ -1413,6 +1713,7 @@ pub struct GraphArgs<'a> {
     pub producer: Option<::flatbuffers::WIPOffset<&'a str>>,
     pub tensors: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Tensor<'a>>>>>,
     pub buffers: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Buffer<'a>>>>>,
+    pub kernels: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<Kernel<'a>>>>>,
     pub entry_points: Option<::flatbuffers::WIPOffset<::flatbuffers::Vector<'a, ::flatbuffers::ForwardsUOffset<EntryPoint<'a>>>>>,
 }
 impl<'a> Default for GraphArgs<'a> {
@@ -1424,6 +1725,7 @@ impl<'a> Default for GraphArgs<'a> {
       producer: None,
       tensors: None,
       buffers: None,
+      kernels: None,
       entry_points: None,
     }
   }
@@ -1455,6 +1757,10 @@ impl<'a: 'b, 'b, A: ::flatbuffers::Allocator + 'a> GraphBuilder<'a, 'b, A> {
     self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Graph::VT_BUFFERS, buffers);
   }
   #[inline]
+  pub fn add_kernels(&mut self, kernels: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<Kernel<'b >>>>) {
+    self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Graph::VT_KERNELS, kernels);
+  }
+  #[inline]
   pub fn add_entry_points(&mut self, entry_points: ::flatbuffers::WIPOffset<::flatbuffers::Vector<'b , ::flatbuffers::ForwardsUOffset<EntryPoint<'b >>>>) {
     self.fbb_.push_slot_always::<::flatbuffers::WIPOffset<_>>(Graph::VT_ENTRY_POINTS, entry_points);
   }
@@ -1481,6 +1787,7 @@ impl ::core::fmt::Debug for Graph<'_> {
       ds.field("producer", &self.producer());
       ds.field("tensors", &self.tensors());
       ds.field("buffers", &self.buffers());
+      ds.field("kernels", &self.kernels());
       ds.field("entry_points", &self.entry_points());
       ds.finish()
   }
@@ -1493,6 +1800,7 @@ pub struct GraphT {
   pub producer: Option<alloc::string::String>,
   pub tensors: Option<alloc::vec::Vec<TensorT>>,
   pub buffers: Option<alloc::vec::Vec<BufferT>>,
+  pub kernels: Option<alloc::vec::Vec<KernelT>>,
   pub entry_points: Option<alloc::vec::Vec<EntryPointT>>,
 }
 impl Default for GraphT {
@@ -1503,6 +1811,7 @@ impl Default for GraphT {
       producer: None,
       tensors: None,
       buffers: None,
+      kernels: None,
       entry_points: None,
     }
   }
@@ -1523,6 +1832,9 @@ impl GraphT {
     let buffers = self.buffers.as_ref().map(|x|{
       let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
     });
+    let kernels = self.kernels.as_ref().map(|x|{
+      let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
+    });
     let entry_points = self.entry_points.as_ref().map(|x|{
       let w: alloc::vec::Vec<_> = x.iter().map(|t| t.pack(_fbb)).collect();_fbb.create_vector(&w)
     });
@@ -1532,6 +1844,7 @@ impl GraphT {
       producer,
       tensors,
       buffers,
+      kernels,
       entry_points,
     })
   }

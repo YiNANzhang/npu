@@ -71,12 +71,26 @@ table Tensor {
     offset : uint64 = 0;             // NEW
 }
 
+enum KernelKind : uint8 {
+    Unknown     = 0,
+    TileUcBin   = 1,  // Tile μC RV32E binary
+    SchedMcuBin = 2,  // Scheduler MCU RV32IMACH binary
+}
+
+table Kernel {
+    name         : string;
+    kind         : KernelKind;
+    buffer       : uint32;
+    entry_offset : uint64 = 0;
+}
+
 table Graph {
     abi_version  : AbiVersion;
     target       : TargetId;
     producer     : string;
     tensors      : [Tensor];
     buffers      : [Buffer];
+    kernels      : [Kernel];       // NEW
     entry_points : [EntryPoint];
 }
 

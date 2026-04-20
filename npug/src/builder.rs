@@ -30,12 +30,27 @@ impl Default for QuantDesc {
     }
 }
 
+pub struct KernelDesc<'a> {
+    pub name: &'a str,
+    pub kind: fb::KernelKind,
+    pub buffer: u32,
+    pub entry_offset: u64,
+}
+
+struct PendingKernel {
+    name: String,
+    kind: fb::KernelKind,
+    buffer: u32,
+    entry_offset: u64,
+}
+
 pub struct GraphBuilder<'a> {
     fbb: FlatBufferBuilder<'a>,
     producer: Option<String>,
     target: fb::TargetId,
     pending_tensors: Vec<PendingTensor>,
     pending_buffers: Vec<Vec<u8>>,
+    pending_kernels: Vec<PendingKernel>,
 }
 
 struct PendingTensor {
@@ -57,6 +72,7 @@ impl<'a> GraphBuilder<'a> {
             target: fb::TargetId::AutoSocV1,
             pending_tensors: Vec::new(),
             pending_buffers: Vec::new(),
+            pending_kernels: Vec::new(),
         }
     }
 
@@ -73,6 +89,17 @@ impl<'a> GraphBuilder<'a> {
     pub fn add_buffer(&mut self, data: &[u8]) -> u32 {
         let idx = self.pending_buffers.len() as u32;
         self.pending_buffers.push(data.to_vec());
+        idx
+    }
+
+    pub fn add_kernel(&mut self, d: KernelDesc<'_>) -> u32 {
+        let idx = self.pending_kernels.len() as u32;
+        self.pending_kernels.push(PendingKernel {
+            name: d.name.to_string(),
+            kind: d.kind,
+            buffer: d.buffer,
+            entry_offset: d.entry_offset,
+        });
         idx
     }
 
@@ -164,6 +191,24 @@ impl<'a> GraphBuilder<'a> {
             .collect();
         let tensors_vec = self.fbb.create_vector(&tensor_offsets);
 
+        let kernel_offsets: Vec<_> = self
+            .pending_kernels
+            .iter()
+            .map(|k| {
+                let name = self.fbb.create_string(&k.name);
+                fb::Kernel::create(
+                    &mut self.fbb,
+                    &fb::KernelArgs {
+                        name: Some(name),
+                        kind: k.kind,
+                        buffer: k.buffer,
+                        entry_offset: k.entry_offset,
+                    },
+                )
+            })
+            .collect();
+        let kernels_vec = self.fbb.create_vector(&kernel_offsets);
+
         let producer = self.producer.take().map(|s| self.fbb.create_string(&s));
         let empty_eps: Vec<WIPOffset<fb::EntryPoint>> = Vec::new();
         let entry_points = self.fbb.create_vector(&empty_eps);
@@ -176,6 +221,7 @@ impl<'a> GraphBuilder<'a> {
                 producer,
                 tensors: Some(tensors_vec),
                 buffers: Some(buffers_vec),
+                kernels: Some(kernels_vec),
                 entry_points: Some(entry_points),
             },
         );
