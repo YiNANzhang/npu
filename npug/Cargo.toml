@@ -16,3 +16,7 @@ flatbuffers.workspace = true
 [[example]]
 name = "gen_golden"
 path = "examples/gen_golden.rs"
+
+[[example]]
+name = "inspect"
+path = "examples/inspect.rs"
