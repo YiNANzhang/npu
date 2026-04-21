@@ -12,3 +12,7 @@ thiserror.workspace = true
 
 [build-dependencies]
 flatbuffers.workspace = true
+
+[[example]]
+name = "gen_golden"
+path = "examples/gen_golden.rs"
