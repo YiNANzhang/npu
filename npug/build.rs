@@ -26,4 +26,17 @@ fn main() {
     let dst = manifest.join("src/generated.rs");
     std::fs::copy(&generated, &dst)
         .unwrap_or_else(|e| panic!("copy {} -> {}: {e}", generated.display(), dst.display()));
+
+    // Generate C header
+    let crate_dir = env!("CARGO_MANIFEST_DIR");
+    std::fs::create_dir_all(format!("{crate_dir}/include")).ok();
+    let cfg = cbindgen::Config::from_file(format!("{crate_dir}/cbindgen.toml")).ok();
+    if let Some(cfg) = cfg {
+        cbindgen::Builder::new()
+            .with_crate(crate_dir)
+            .with_config(cfg)
+            .generate()
+            .map(|b| b.write_to_file(format!("{crate_dir}/include/npug.h")))
+            .ok();
+    }
 }

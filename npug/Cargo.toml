@@ -12,6 +12,7 @@ thiserror.workspace = true
 
 [build-dependencies]
 flatbuffers.workspace = true
+cbindgen = "0.27"
 
 [[example]]
 name = "gen_golden"
