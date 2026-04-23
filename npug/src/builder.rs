@@ -160,7 +160,12 @@ impl<'a> GraphBuilder<'a> {
         self
     }
 
-    pub fn set_region(&mut self, tensor_idx: u32, region: fb::MemoryRegion, offset: u64) -> &mut Self {
+    pub fn set_region(
+        &mut self,
+        tensor_idx: u32,
+        region: fb::MemoryRegion,
+        offset: u64,
+    ) -> &mut Self {
         self.pending_tensors[tensor_idx as usize].region = region;
         self.pending_tensors[tensor_idx as usize].offset = offset;
         self
@@ -172,15 +177,23 @@ impl<'a> GraphBuilder<'a> {
             name: d.name.to_string(),
             inputs: d.inputs.to_vec(),
             outputs: d.outputs.to_vec(),
-            buckets: d.buckets.iter().map(|b| PendingBucket {
-                shape_hint_dims: b.shape_hint_dims.to_vec(),
-                schedule: b.schedule.iter().map(|e| ScheduleEntryDesc {
-                    tile_id: e.tile_id,
-                    kernel_index: e.kernel_index,
-                    args_offset: e.args_offset,
-                    args_size: e.args_size,
-                }).collect(),
-            }).collect(),
+            buckets: d
+                .buckets
+                .iter()
+                .map(|b| PendingBucket {
+                    shape_hint_dims: b.shape_hint_dims.to_vec(),
+                    schedule: b
+                        .schedule
+                        .iter()
+                        .map(|e| ScheduleEntryDesc {
+                            tile_id: e.tile_id,
+                            kernel_index: e.kernel_index,
+                            args_offset: e.args_offset,
+                            args_size: e.args_size,
+                        })
+                        .collect(),
+                })
+                .collect(),
         });
         idx
     }
@@ -341,11 +354,14 @@ impl<'a> GraphBuilder<'a> {
             },
         );
 
-        self.fbb.finish(graph, Some(std::str::from_utf8(version::MAGIC).unwrap()));
+        self.fbb
+            .finish(graph, Some(std::str::from_utf8(version::MAGIC).unwrap()));
         self.fbb.finished_data().to_vec()
     }
 }
 
 impl<'a> Default for GraphBuilder<'a> {
-    fn default() -> Self { Self::new() }
+    fn default() -> Self {
+        Self::new()
+    }
 }

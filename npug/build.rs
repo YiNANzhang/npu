@@ -9,12 +9,7 @@ fn main() {
     println!("cargo:rerun-if-changed={}", schema.display());
 
     let status = Command::new("flatc")
-        .args([
-            "--rust",
-            "--gen-mutable",
-            "--gen-object-api",
-            "-o",
-        ])
+        .args(["--rust", "--gen-mutable", "--gen-object-api", "-o"])
         .arg(&out_dir)
         .arg(&schema)
         .status()
@@ -26,6 +21,8 @@ fn main() {
     let dst = manifest.join("src/generated.rs");
     std::fs::copy(&generated, &dst)
         .unwrap_or_else(|e| panic!("copy {} -> {}: {e}", generated.display(), dst.display()));
+    // Format generated.rs so `cargo fmt --check` in CI is stable across regenerations.
+    let _ = Command::new("rustfmt").arg(&dst).status();
 
     // Generate C header
     let crate_dir = env!("CARGO_MANIFEST_DIR");

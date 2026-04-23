@@ -5,8 +5,8 @@ use npug::{DType, MemoryRegion, QuantScheme};
 #[test]
 fn roundtrip_mx_block_quant() {
     let mut b = GraphBuilder::new();
-    let weight_buf = b.add_buffer(&vec![0u8; 1024]);
-    let scale_buf = b.add_buffer(&vec![0x40u8; 32]); // 32 E8M0 scales
+    let weight_buf = b.add_buffer(&[0u8; 1024]);
+    let scale_buf = b.add_buffer(&[0x40u8; 32]); // 32 E8M0 scales
 
     let t = b.add_tensor(TensorDesc {
         name: "w_qkv",
@@ -15,13 +15,16 @@ fn roundtrip_mx_block_quant() {
         symbol_names: &[],
         buffer: Some(weight_buf),
     });
-    b.attach_quant(t, QuantDesc {
-        scheme: QuantScheme::MxBlock32,
-        scale_buffer: Some(scale_buf),
-        zero_point_buffer: None,
-        axis: -1,
-        block_size: 32,
-    });
+    b.attach_quant(
+        t,
+        QuantDesc {
+            scheme: QuantScheme::MxBlock32,
+            scale_buffer: Some(scale_buf),
+            zero_point_buffer: None,
+            axis: -1,
+            block_size: 32,
+        },
+    );
     b.set_region(t, MemoryRegion::Lpddr, 0x1000_0000);
 
     let bytes = b.finish();

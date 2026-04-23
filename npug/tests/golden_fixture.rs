@@ -11,8 +11,12 @@ const GOLDEN_SHA256: &str = "8f591b7530f78e4919bedb31a7882093eb1b6e0ef6216ceaf35
 fn sha256_hex(bytes: &[u8]) -> String {
     use std::io::Write;
     use std::process::{Command, Stdio};
-    let mut c = Command::new("shasum").args(["-a", "256"])
-        .stdin(Stdio::piped()).stdout(Stdio::piped()).spawn().unwrap();
+    let mut c = Command::new("shasum")
+        .args(["-a", "256"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
     c.stdin.as_mut().unwrap().write_all(bytes).unwrap();
     let out = c.wait_with_output().unwrap();
     let s = String::from_utf8(out.stdout).unwrap();
@@ -21,7 +25,8 @@ fn sha256_hex(bytes: &[u8]) -> String {
 
 #[test]
 fn golden_fixture_hash_stable() {
-    let mut f = std::fs::File::open(FIXTURE).expect("fixture missing; run `cargo run --example gen_golden`");
+    let mut f = std::fs::File::open(FIXTURE)
+        .expect("fixture missing; run `cargo run --example gen_golden`");
     let mut bytes = Vec::new();
     f.read_to_end(&mut bytes).unwrap();
     let got = sha256_hex(&bytes);

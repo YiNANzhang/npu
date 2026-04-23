@@ -39,18 +39,28 @@ fn main() {
     let kernels = r.kernels();
     println!("kernels  : {}", kernels.len());
     for (i, k) in kernels.iter().enumerate() {
-        println!("  [{i:3}] {:<32} {:?} buf={} entry=0x{:x}",
-                 k.name, k.kind, k.buffer, k.entry_offset);
+        println!(
+            "  [{i:3}] {:<32} {:?} buf={} entry=0x{:x}",
+            k.name, k.kind, k.buffer, k.entry_offset
+        );
     }
 
     let eps = r.entry_points_full();
     println!("entry pts: {}", eps.len());
     for (i, ep) in eps.iter().enumerate() {
-        println!("  [{i:3}] {:<16} in={:?} out={:?} buckets={}",
-                 ep.name, ep.inputs, ep.outputs, ep.buckets.len());
+        println!(
+            "  [{i:3}] {:<16} in={:?} out={:?} buckets={}",
+            ep.name,
+            ep.inputs,
+            ep.outputs,
+            ep.buckets.len()
+        );
         for (bi, b) in ep.buckets.iter().enumerate() {
-            println!("        bucket[{bi}] shape={:?} schedule={}",
-                     b.shape_hint_dims, b.schedule.len());
+            println!(
+                "        bucket[{bi}] shape={:?} schedule={}",
+                b.shape_hint_dims,
+                b.schedule.len()
+            );
         }
     }
 }

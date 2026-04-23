@@ -1,4 +1,6 @@
-use npug::builder::{BucketDesc, EntryPointDesc, GraphBuilder, KernelDesc, ScheduleEntryDesc, TensorDesc};
+use npug::builder::{
+    BucketDesc, EntryPointDesc, GraphBuilder, KernelDesc, ScheduleEntryDesc, TensorDesc,
+};
 use npug::reader::GraphReader;
 use npug::{DType, KernelKind};
 
@@ -6,14 +8,25 @@ use npug::{DType, KernelKind};
 fn roundtrip_single_bucket_entry() {
     let mut b = GraphBuilder::new();
     let in_t = b.add_tensor(TensorDesc {
-        name: "in", dtype: DType::Bf16, dims: &[1, 128], symbol_names: &[], buffer: None,
+        name: "in",
+        dtype: DType::Bf16,
+        dims: &[1, 128],
+        symbol_names: &[],
+        buffer: None,
     });
     let out_t = b.add_tensor(TensorDesc {
-        name: "out", dtype: DType::Bf16, dims: &[1, 128], symbol_names: &[], buffer: None,
+        name: "out",
+        dtype: DType::Bf16,
+        dims: &[1, 128],
+        symbol_names: &[],
+        buffer: None,
     });
     let buf = b.add_buffer(&[0u8; 16]);
     let kern = b.add_kernel(KernelDesc {
-        name: "passthrough", kind: KernelKind::TileUcBin, buffer: buf, entry_offset: 0,
+        name: "passthrough",
+        kind: KernelKind::TileUcBin,
+        buffer: buf,
+        entry_offset: 0,
     });
 
     let ep = b.add_entry_point(EntryPointDesc {

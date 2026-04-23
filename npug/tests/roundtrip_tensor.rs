@@ -40,5 +40,8 @@ fn roundtrip_symbolic_shape() {
     let r = GraphReader::from_bytes(&bytes).unwrap();
     let t = &r.tensors()[0];
     assert_eq!(t.dims, vec![1, -1, 4096]);
-    assert_eq!(t.symbol_names, vec!["".to_string(), "S".to_string(), "".to_string()]);
+    assert_eq!(
+        t.symbol_names,
+        vec!["".to_string(), "S".to_string(), "".to_string()]
+    );
 }

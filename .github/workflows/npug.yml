@@ -1,0 +1,58 @@
+name: npug
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'npug/**'
+      - 'Cargo.toml'
+      - '.github/workflows/npug.yml'
+  pull_request:
+    paths:
+      - 'npug/**'
+      - 'Cargo.toml'
+      - '.github/workflows/npug.yml'
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install flatc 24
+        run: |
+          wget -q https://github.com/google/flatbuffers/releases/download/v24.3.25/Linux.flatc.binary.g++-13.zip
+          unzip -q Linux.flatc.binary.g++-13.zip
+          sudo mv flatc /usr/local/bin/
+          flatc --version
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: fmt
+        run: cargo fmt -p npug -- --check
+
+      - name: clippy
+        run: cargo clippy -p npug --all-targets -- -D warnings
+
+      - name: build
+        run: cargo build -p npug --all-targets
+
+      - name: test
+        run: cargo test -p npug
+
+      - name: regen golden + diff check
+        run: |
+          cargo run -p npug --example gen_golden
+          git diff --exit-code npug/fixtures/minimal_v0_1.npug || \
+            (echo "FAIL: golden fixture drifted. ABI must bump." && exit 1)
+
+      - name: Python binding smoke
+        run: |
+          pip install flatbuffers==24.3.25
+          bash npug/python/gen_py.sh
+          python3 npug/python/test_parse.py
